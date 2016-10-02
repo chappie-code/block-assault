@@ -8,6 +8,7 @@
 
 import SpriteKit
 
+
 struct PhysicsCategory {
     static let None      : UInt32 = 0
     static let All       : UInt32 = UInt32.max
@@ -51,7 +52,8 @@ extension CGPoint {
 class GameScene: SKScene , SKPhysicsContactDelegate {
     // 1
     let player = SKSpriteNode(imageNamed: "player");
-        
+    var monstersDestroyed = 0
+    
     override func didMoveToView(view: SKView) {
         
         
@@ -150,6 +152,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         print("Hit")
         projectile.removeFromParent()
         monster.removeFromParent()
+        
+        monstersDestroyed += 1;
+        if (monstersDestroyed > 30) {
+            let reveal = SKTransition.flipHorizontalWithDuration(0.5)
+            let gameOverScene = GameOverScene(size: self.size, won: true)
+            self.view?.presentScene(gameOverScene, transition: reveal)
+        }
     }
     
     override func update(currentTime: CFTimeInterval) {
@@ -167,33 +176,32 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     func addMonster() {
         
         // Create sprite
-        let monster = SKSpriteNode(imageNamed: "monster")
-        
-        monster.physicsBody = SKPhysicsBody(rectangleOfSize: monster.size) // 1
-        monster.physicsBody?.dynamic = true // 2
-        monster.physicsBody?.categoryBitMask = PhysicsCategory.Monster // 3
-        monster.physicsBody?.contactTestBitMask = PhysicsCategory.Projectile // 4
-        monster.physicsBody?.collisionBitMask = PhysicsCategory.None // 5
         
         
-        // Determine where to spawn the monster along the Y axis
-        let actualY = random(min: monster.size.height/2, max: size.height - monster.size.height/2)
+        let myMonster = Monster()
+        let xPosition = self.size.width + myMonster.size.width/2;
+        let yPosition = random(min:0, max:self.size.height);
+        let position = CGPoint(x: xPosition, y: yPosition);
         
-        // Position the monster slightly off-screen along the right edge,
-        // and along a random position along the Y axis as calculated above
-        monster.position = CGPoint(x: size.width + monster.size.width/2, y: actualY)
+        myMonster.setPosition(position);
+        
+        
+        
+        let randomY = random(min: myMonster.size.height/2, max: size.height - myMonster.size.height/2);
         
         // Add the monster to the scene
-        addChild(monster)
+        addChild(myMonster.spriteObject);
         
-        // Determine speed of the monster
-        let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
+        myMonster.attack(randomY);
         
         // Create the actions
-        let actionMove = SKAction.moveTo(CGPoint(x: -monster.size.width/2, y: actualY), duration: NSTimeInterval(actualDuration))
-        let actionMoveDone = SKAction.removeFromParent()
-        monster.runAction(SKAction.sequence([actionMove, actionMoveDone]))
+        
+        
+        
+        
     }
+    
+    
     
     
 }
