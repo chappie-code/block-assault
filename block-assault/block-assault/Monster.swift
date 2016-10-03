@@ -39,7 +39,7 @@ class Monster{
         self.spriteObject.position = myPosition;
     }
     
-    func attack(playerPosition:CGFloat)
+    func attack(playerPosition:CGPoint)
     {
         // Determine speed of the monster
         
@@ -47,7 +47,7 @@ class Monster{
         let roationAmount = random(min:CGFloat(0), max:CGFloat(2.0));
         
         let rotateAction = SKAction.rotateByAngle(roationAmount, duration: 0);
-        let actionMove = SKAction.moveTo(CGPoint(x: self.size.width/2, y: playerPosition), duration: NSTimeInterval(actualDuration))
+        let actionMove = SKAction.moveTo(playerPosition, duration: NSTimeInterval(actualDuration))
         let actionMoveDone = SKAction.removeFromParent()
         
         

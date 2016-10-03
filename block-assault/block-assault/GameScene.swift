@@ -65,7 +65,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         // 2
         backgroundColor = SKColor.whiteColor()
         // 3
-        player.position = CGPoint(x: size.width * 0.1, y: size.height * 0.5)
+        player.position = CGPoint(x: size.width / 2 , y: size.height * 0.9)
         // 4
         addChild(player)
         
@@ -102,10 +102,12 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         let offset = touchLocation - projectile.position;
         
         // 4) Bail out if you are shooting down or backwards
+        /*
         if(0.0 > offset.x)
         {
             return
         }
+        */
         
         // 5) Ok to add now - you've double checked position
         
@@ -179,23 +181,17 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         
         let myMonster = Monster()
-        let xPosition = self.size.width + myMonster.size.width/2;
-        let yPosition = random(min:0, max:self.size.height);
+        let yPosition = 0 - myMonster.size.height/2;
+        let xPosition = random(min:0, max:self.size.width);
         let position = CGPoint(x: xPosition, y: yPosition);
         
         myMonster.setPosition(position);
         
         
-        
-        let randomY = random(min: myMonster.size.height/2, max: size.height - myMonster.size.height/2);
-        
         // Add the monster to the scene
         addChild(myMonster.spriteObject);
         
-        myMonster.attack(randomY);
-        
-        // Create the actions
-        
+        myMonster.attack(player.position);
         
         
         
