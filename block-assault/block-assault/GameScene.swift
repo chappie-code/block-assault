@@ -51,8 +51,19 @@ extension CGPoint {
 
 class GameScene: SKScene , SKPhysicsContactDelegate {
     // 1
-    let player = SKSpriteNode(imageNamed: "player");
+    var player:Player;
     var monstersDestroyed = 0
+    
+    override init(size: CGSize) {
+        
+        self.player = Player();
+        super.init(size: size);
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func didMoveToView(view: SKView) {
         
@@ -65,9 +76,9 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         // 2
         backgroundColor = SKColor.whiteColor()
         // 3
-        player.position = CGPoint(x: size.width / 2 , y: size.height * 0.9)
+        player.setPosition(CGPoint(x: size.width / 2 , y: size.height * 0.9));
         // 4
-        addChild(player)
+        addChild(player.spriteObject)
         
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
@@ -87,7 +98,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         // 2) Set up initial location of projectile
         
         let projectile = SKSpriteNode(imageNamed: "projectile");
-        projectile.position = player.position;
+        projectile.position = player.getPosition();
         
         
         
@@ -191,11 +202,10 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         // Add the monster to the scene
         addChild(myMonster.spriteObject);
         
-        myMonster.attack(player.position);
-        
-        
+        myMonster.attack(player.getPosition());
         
     }
+    
     
     
     
