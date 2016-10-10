@@ -24,8 +24,8 @@ class Monster{
         spriteObject.physicsBody = SKPhysicsBody(rectangleOfSize: spriteObject.size);
         spriteObject.physicsBody?.dynamic = true;
         spriteObject.physicsBody?.categoryBitMask = PhysicsCategory.Monster
-        spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.Projectile
-        spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None
+        spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.Player | PhysicsCategory.Projectile
+        spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None;
         spriteObject.physicsBody?.usesPreciseCollisionDetection = true;
         
         size = spriteObject.size;

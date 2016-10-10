@@ -10,10 +10,11 @@ import SpriteKit
 
 
 struct PhysicsCategory {
-    static let None      : UInt32 = 0
-    static let All       : UInt32 = UInt32.max
-    static let Monster   : UInt32 = 0b1       // 1
-    static let Projectile: UInt32 = 0b10      // 2
+    static let None         : UInt32 = 0
+    static let All          : UInt32 = UInt32.max
+    static let Player       : UInt32 = 0b1       // 1
+    static let Monster      : UInt32 = 0b10      // 2
+    static let Projectile   : UInt32 = 0b11      // 3
 }
 
 func + (left: CGPoint, right: CGPoint) -> CGPoint {
@@ -52,7 +53,8 @@ extension CGPoint {
 class GameScene: SKScene , SKPhysicsContactDelegate {
     // 1
     var player:Player;
-    var monstersDestroyed = 0
+    var monstersDestroyed = 0;
+    var playerHealth = 0;
     
     override init(size: CGSize) {
         
@@ -67,7 +69,16 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         
+        // 3
+        let label = SKLabelNode(fontNamed: "Chalkduster")
+        var c:String = String(format:"%.1f", player.health);
+        label.text = c;
+        label.fontSize = 40;
+        label.fontColor = SKColor.blackColor()
+        label.position = CGPoint(x: 0, y: self.size.height - 40);
+        addChild(label)
         
+
         
         
         physicsWorld.gravity = CGVectorMake(0, 0);
@@ -154,14 +165,32 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         }
         
         // 2
-        if ((firstBody.categoryBitMask & PhysicsCategory.Monster != 0) &&
-            (secondBody.categoryBitMask & PhysicsCategory.Projectile != 0)) {
-            projectileDidCollideWithMonster(firstBody.node as! SKSpriteNode, monster: secondBody.node as! SKSpriteNode)
+        if ((firstBody.categoryBitMask == PhysicsCategory.Monster) &&
+            (secondBody.categoryBitMask == PhysicsCategory.Projectile)) {
+            projectileDidCollideWithMonster(firstBody.node as! SKSpriteNode, projectile: secondBody.node as! SKSpriteNode)
         }
+        
+        if ((firstBody.categoryBitMask == PhysicsCategory.Player) &&
+            (secondBody.categoryBitMask == PhysicsCategory.Monster)) {
+            
+                monsterDidCollideWithPlayer(firstBody.node as! SKSpriteNode, monster: secondBody.node as! SKSpriteNode);
+            
+        }
+        
         
     }
     
-    func projectileDidCollideWithMonster(projectile:SKSpriteNode, monster:SKSpriteNode) {
+    
+    func monsterDidCollideWithPlayer(player:SKSpriteNode, monster:SKSpriteNode) {
+        print("Hit Player")
+        
+        monster.removeFromParent()
+        
+        self.player.removeHealth(5) ;
+        print(self.player.health);
+    }
+    
+    func projectileDidCollideWithMonster(monster:SKSpriteNode, projectile:SKSpriteNode) {
         print("Hit")
         projectile.removeFromParent()
         monster.removeFromParent()

@@ -11,7 +11,7 @@ import SpriteKit
 
 
 class Player {
-    var health = 0.0;
+    var health = 100.0;
     var spriteObject:SKSpriteNode;
     var spriteName:String;
     var size:CGSize;
@@ -24,8 +24,8 @@ class Player {
         spriteObject = SKSpriteNode(imageNamed: spriteName);
         spriteObject.physicsBody = SKPhysicsBody(rectangleOfSize: spriteObject.size);
         spriteObject.physicsBody?.dynamic = true;
-        spriteObject.physicsBody?.categoryBitMask = PhysicsCategory.None
-        spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.Projectile
+        spriteObject.physicsBody?.categoryBitMask = PhysicsCategory.Player
+        spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.None
         spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None
         spriteObject.physicsBody?.usesPreciseCollisionDetection = true;
         
