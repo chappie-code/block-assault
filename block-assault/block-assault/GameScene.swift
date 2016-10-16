@@ -56,6 +56,9 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     var monstersDestroyed = 0;
     var playerHealth = 0;
     
+    var displayObjects:Dictionary = [String:NSObject]();
+    
+    
     override init(size: CGSize) {
         
         self.player = Player();
@@ -69,6 +72,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         
+        
         // 3
         let label = SKLabelNode(fontNamed: "Chalkduster")
         var c:String = String(format:"%.1f", player.health);
@@ -78,7 +82,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         label.position = CGPoint(x: 0, y: self.size.height - 40);
         addChild(label)
         
-
+        
         
         
         physicsWorld.gravity = CGVectorMake(0, 0);
@@ -149,6 +153,11 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         let actionMoveDone = SKAction.removeFromParent();
         projectile.runAction(SKAction.sequence([actionMove,actionMoveDone]));
         
+    }
+    
+    funct updateDisplay()
+    {
+    
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
