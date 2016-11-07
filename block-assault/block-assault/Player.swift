@@ -22,8 +22,8 @@ class Player {
     {
         spriteName = "player";
         spriteObject = SKSpriteNode(imageNamed: spriteName);
-        spriteObject.physicsBody = SKPhysicsBody(rectangleOfSize: spriteObject.size);
-        spriteObject.physicsBody?.dynamic = true;
+        spriteObject.physicsBody = SKPhysicsBody(rectangleOf: spriteObject.size);
+        spriteObject.physicsBody?.isDynamic = true;
         spriteObject.physicsBody?.categoryBitMask = PhysicsCategory.Player
         spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.None
         spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None

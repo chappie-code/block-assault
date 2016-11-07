@@ -21,8 +21,8 @@ class Monster{
     {
         spriteName = "monster";
         spriteObject = SKSpriteNode(imageNamed: spriteName);
-        spriteObject.physicsBody = SKPhysicsBody(rectangleOfSize: spriteObject.size);
-        spriteObject.physicsBody?.dynamic = true;
+        spriteObject.physicsBody = SKPhysicsBody(rectangleOf: spriteObject.size);
+        spriteObject.physicsBody?.isDynamic = true;
         spriteObject.physicsBody?.categoryBitMask = PhysicsCategory.Monster
         spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.Player | PhysicsCategory.Projectile
         spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None;
@@ -46,12 +46,12 @@ class Monster{
         let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
         let roationAmount = random(min:CGFloat(0), max:CGFloat(2.0));
         
-        let rotateAction = SKAction.rotateByAngle(roationAmount, duration: 0);
-        let actionMove = SKAction.moveTo(playerPosition, duration: NSTimeInterval(actualDuration))
+        let rotateAction = SKAction.rotate(byAngle: roationAmount, duration: 0);
+        let actionMove = SKAction.move(to: playerPosition, duration: TimeInterval(actualDuration))
         let actionMoveDone = SKAction.removeFromParent()
         
         
-        self.spriteObject.runAction(SKAction.sequence([rotateAction, actionMove, actionMoveDone]));
+        self.spriteObject.run(SKAction.sequence([rotateAction, actionMove, actionMoveDone]));
         
     }
     

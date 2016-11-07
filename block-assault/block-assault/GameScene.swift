@@ -70,7 +70,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         
         
         // 3
@@ -78,37 +78,37 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         var c:String = String(format:"%.1f", player.health);
         label.text = c;
         label.fontSize = 40;
-        label.fontColor = SKColor.blackColor()
+        label.fontColor = SKColor.black;
         label.position = CGPoint(x: 0, y: self.size.height - 40);
         addChild(label)
         
         
         
         
-        physicsWorld.gravity = CGVectorMake(0, 0);
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0);
         physicsWorld.contactDelegate = self;
 
         // 2
-        backgroundColor = SKColor.whiteColor()
+        backgroundColor = SKColor.white
         // 3
-        player.setPosition(CGPoint(x: size.width / 2 , y: size.height * 0.9));
+        player.setPosition(myPosition: CGPoint(x: size.width / 2 , y: size.height * 0.9));
         // 4
         addChild(player.spriteObject)
         
-        runAction(SKAction.repeatActionForever(
+        run(SKAction.repeatForever(
             SKAction.sequence([
-                SKAction.runBlock(addMonster),
-                SKAction.waitForDuration(1.0)
+                SKAction.run(addMonster),
+                SKAction.wait(forDuration: 1.0)
                 ])
             ));
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // 1) choose the touch to work with
         guard let touch = touches.first else{
             return;
         }
-        let touchLocation = touch.locationInNode(self);
+        let touchLocation = touch.location(in: self);
         
         // 2) Set up initial location of projectile
         
@@ -118,7 +118,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         
         projectile.physicsBody = SKPhysicsBody(circleOfRadius: projectile.size.width/2)
-        projectile.physicsBody?.dynamic = true
+        projectile.physicsBody?.isDynamic = true
         projectile.physicsBody?.categoryBitMask = PhysicsCategory.Projectile
         projectile.physicsBody?.contactTestBitMask = PhysicsCategory.Monster
         projectile.physicsBody?.collisionBitMask = PhysicsCategory.None
@@ -149,13 +149,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         let realDest = shootAmount + projectile.position;
         
         // 9) Create the action
-        let actionMove = SKAction.moveTo(realDest,duration: 2.0);
+        let actionMove = SKAction.move(to: realDest,duration: 2.0);
         let actionMoveDone = SKAction.removeFromParent();
-        projectile.runAction(SKAction.sequence([actionMove,actionMoveDone]));
+        projectile.run(SKAction.sequence([actionMove,actionMoveDone]));
         
     }
     
-    funct updateDisplay()
+    func updateDisplay()
     {
     
     }
@@ -176,13 +176,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         // 2
         if ((firstBody.categoryBitMask == PhysicsCategory.Monster) &&
             (secondBody.categoryBitMask == PhysicsCategory.Projectile)) {
-            projectileDidCollideWithMonster(firstBody.node as! SKSpriteNode, projectile: secondBody.node as! SKSpriteNode)
+            projectileDidCollideWithMonster(monster: firstBody.node as! SKSpriteNode, projectile: secondBody.node as! SKSpriteNode)
         }
         
         if ((firstBody.categoryBitMask == PhysicsCategory.Player) &&
             (secondBody.categoryBitMask == PhysicsCategory.Monster)) {
             
-                monsterDidCollideWithPlayer(firstBody.node as! SKSpriteNode, monster: secondBody.node as! SKSpriteNode);
+                monsterDidCollideWithPlayer(player: firstBody.node as! SKSpriteNode, monster: secondBody.node as! SKSpriteNode);
             
         }
         
@@ -195,7 +195,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         monster.removeFromParent()
         
-        self.player.removeHealth(5) ;
+        self.player.removeHealth(by: 5) ;
         print(self.player.health);
     }
     
@@ -206,13 +206,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         monstersDestroyed += 1;
         if (monstersDestroyed > 30) {
-            let reveal = SKTransition.flipHorizontalWithDuration(0.5)
+            let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
             let gameOverScene = GameOverScene(size: self.size, won: true)
             self.view?.presentScene(gameOverScene, transition: reveal)
         }
     }
     
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
     }
     
@@ -234,13 +234,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         let xPosition = random(min:0, max:self.size.width);
         let position = CGPoint(x: xPosition, y: yPosition);
         
-        myMonster.setPosition(position);
+        myMonster.setPosition(myPosition: position);
         
         
         // Add the monster to the scene
         addChild(myMonster.spriteObject);
         
-        myMonster.attack(player.getPosition());
+        myMonster.attack(playerPosition: player.getPosition());
         
     }
     
