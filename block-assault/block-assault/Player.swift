@@ -16,6 +16,8 @@ class Player {
     var spriteName:String;
     var size:CGSize;
     var position:CGPoint?;
+    var healthMax:CGFloat = 100.0;
+    var score:Int = 0;
     
     
     init()
@@ -37,6 +39,11 @@ class Player {
     {
         self.health = valueTo;
         
+    }
+    
+    func getHealth() -> Double
+    {
+        return self.health;
     }
     
     func removeHealth(by:Double)
@@ -61,6 +68,15 @@ class Player {
     
     func random(min: CGFloat, max: CGFloat) -> CGFloat {
         return random() * (max - min) + min
+    }
+    
+    func updateScore(increase by:Int)
+    {
+        self.score += by;
+    }
+    func getScore() -> Int
+    {
+        return self.score;
     }
 
 }

@@ -55,13 +55,15 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     var player:Player;
     var monstersDestroyed = 0;
     var playerHealth = 0;
+    var display:Display;
     
-    var displayObjects:Dictionary = [String:NSObject]();
+    
     
     
     override init(size: CGSize) {
         
         self.player = Player();
+        self.display = Display();
         super.init(size: size);
         
         
@@ -72,17 +74,6 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     }
     
     override func didMove(to view: SKView) {
-        
-        
-        // 3
-        let label = SKLabelNode(fontNamed: "Chalkduster")
-        let c:String = String(format:"%.1f", player.health);
-        label.text = c;
-        label.fontSize = 40;
-        label.fontColor = SKColor.black;
-        label.position = CGPoint(x: 0, y: self.size.height - 40);
-        addChild(label)
-        
         
         
         
@@ -96,7 +87,9 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         // 3
         player.setPosition(myPosition: CGPoint(x: size.width / 2 , y: size.height * 0.9));
         // 4
-        addChild(player.spriteObject)
+        addChild(player.spriteObject);
+        addChild(display.healthLabel);
+        addChild(display.scoreLabel);
         
         run(SKAction.repeatForever(
             SKAction.sequence([
@@ -194,9 +187,11 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     func monsterDidCollideWithPlayer(player:SKSpriteNode, monster:SKSpriteNode) {
         print("Hit Player")
         
-        monster.removeFromParent()
+        monster.removeFromParent();
+        
         
         self.player.removeHealth(by: 5) ;
+        self.display.updateHealth(health: self.player.getHealth());
         print(self.player.health);
     }
     
@@ -206,6 +201,10 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         monster.removeFromParent()
         
         monstersDestroyed += 1;
+        player.updateScore(increase: 1);
+        display.updateScore(score: player.getScore());
+        
+        
         if (monstersDestroyed > 30) {
             let reveal = SKTransition.flipHorizontal(withDuration: 0.5)
             let gameOverScene = GameOverScene(size: self.size, won: true)
