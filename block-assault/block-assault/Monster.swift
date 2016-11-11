@@ -24,7 +24,7 @@ class Monster{
         spriteObject.physicsBody = SKPhysicsBody(rectangleOf: spriteObject.size);
         spriteObject.physicsBody?.isDynamic = true;
         spriteObject.physicsBody?.categoryBitMask = PhysicsCategory.Monster
-        spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.Player | PhysicsCategory.Projectile
+        spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.Projectile
         spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None;
         spriteObject.physicsBody?.usesPreciseCollisionDetection = true;
         
@@ -59,7 +59,7 @@ class Monster{
         return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }
     
-    func random(min min: CGFloat, max: CGFloat) -> CGFloat {
+    func random(min: CGFloat, max: CGFloat) -> CGFloat {
         return random() * (max - min) + min
     }
     

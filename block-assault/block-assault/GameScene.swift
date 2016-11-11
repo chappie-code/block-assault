@@ -64,6 +64,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         self.player = Player();
         super.init(size: size);
         
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -75,7 +76,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         // 3
         let label = SKLabelNode(fontNamed: "Chalkduster")
-        var c:String = String(format:"%.1f", player.health);
+        let c:String = String(format:"%.1f", player.health);
         label.text = c;
         label.fontSize = 40;
         label.fontColor = SKColor.black;
@@ -85,8 +86,10 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         
         
-        physicsWorld.gravity = CGVector(dx: 0, dy: 0);
-        physicsWorld.contactDelegate = self;
+        self.physicsWorld.gravity = CGVector.zero;
+        self.physicsWorld.contactDelegate = self;
+        
+        
 
         // 2
         backgroundColor = SKColor.white
@@ -104,6 +107,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("action");
         // 1) choose the touch to work with
         guard let touch = touches.first else{
             return;
@@ -160,7 +164,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     }
     
-    func didBeginContact(contact: SKPhysicsContact) {
+    func didBegin(_ contact: SKPhysicsContact) {
         
         // 1
         var firstBody: SKPhysicsBody
@@ -174,16 +178,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         }
         
         // 2
-        if ((firstBody.categoryBitMask == PhysicsCategory.Monster) &&
-            (secondBody.categoryBitMask == PhysicsCategory.Projectile)) {
+        if ((firstBody.categoryBitMask == PhysicsCategory.Monster) && (secondBody.categoryBitMask == PhysicsCategory.Projectile))
+        {
             projectileDidCollideWithMonster(monster: firstBody.node as! SKSpriteNode, projectile: secondBody.node as! SKSpriteNode)
         }
-        
-        if ((firstBody.categoryBitMask == PhysicsCategory.Player) &&
-            (secondBody.categoryBitMask == PhysicsCategory.Monster)) {
-            
-                monsterDidCollideWithPlayer(player: firstBody.node as! SKSpriteNode, monster: secondBody.node as! SKSpriteNode);
-            
+        if ((firstBody.categoryBitMask == PhysicsCategory.Player) && (secondBody.categoryBitMask == PhysicsCategory.Monster))
+        {
+            monsterDidCollideWithPlayer(player: firstBody.node as! SKSpriteNode, monster: secondBody.node as! SKSpriteNode);
         }
         
         
@@ -220,7 +221,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }
     
-    func random(min min: CGFloat, max: CGFloat) -> CGFloat {
+    func random(min: CGFloat, max: CGFloat) -> CGFloat {
         return random() * (max - min) + min
     }
     
