@@ -18,6 +18,7 @@ class Player {
     var position:CGPoint?;
     var healthMax:CGFloat = 100.0;
     var score:Int = 0;
+    var parentScene:SKScene;
     
     
     init()
@@ -33,6 +34,43 @@ class Player {
         
         size = spriteObject.size;
         
+        parentScene = SKScene();
+        
+    }
+    
+    func setParentScene(scene:SKScene)
+    {
+        self.parentScene = scene;
+    }
+    
+    func swordAnimation()
+    {
+        let shape = SKShapeNode()
+        shape.path = UIBezierPath(roundedRect: CGRect(x: -5, y: 0, width: 10, height: 50), cornerRadius: 2).cgPath
+        shape.position = CGPoint(x: self.getPosition().x,y: self.getPosition().y - 100) ;
+        
+        shape.fillColor = UIColor.red
+        shape.strokeColor = UIColor.blue
+        shape.glowWidth = 5;
+        
+        
+        shape.lineWidth = 10
+        
+        
+        let actionMove = SKAction.move(to: CGPoint(x: self.getPosition().x, y: self.getPosition().y + 30), duration: 1)
+        let actionMoveDone = SKAction.removeFromParent()
+        
+        
+        self.parentScene.addChild(shape)
+        
+        shape.run(SKAction.sequence([ actionMove, actionMoveDone]));
+        
+        
+        
+        
+        
+        
+
     }
     
     func setHeath(valueTo:Double)

@@ -62,9 +62,14 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     override init(size: CGSize) {
         
-        self.player = Player();
+        
         self.display = Display();
+        self.player = Player();
+        
         super.init(size: size);
+        
+        
+        self.player.setParentScene(scene: self.scene!);
         
         
     }
@@ -86,7 +91,8 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     }
     
     func swipedDown(sender:UISwipeGestureRecognizer){
-        print("swiped down")
+        print("swiped down");
+        player.swordAnimation();
     }
     
     
@@ -115,16 +121,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         self.physicsWorld.gravity = CGVector.zero;
         self.physicsWorld.contactDelegate = self;
         
-        let shape = SKShapeNode()
-        shape.path = UIBezierPath(roundedRect: CGRect(x: -128, y: -128, width: 256, height: 256), cornerRadius: 64).cgPath
-        shape.position = CGPoint(x: frame.midX, y: frame.midY)
-        shape.fillColor = UIColor.red
-        shape.strokeColor = UIColor.blue
-        shape.glowWidth = 10;
-        
-        shape.lineWidth = 10
-        addChild(shape)
-        
+                
 
         // 2
         backgroundColor = SKColor.green;
