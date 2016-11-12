@@ -73,17 +73,61 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func swipedRight(sender:UISwipeGestureRecognizer){
+        print("swiped right")
+    }
+    
+    func swipedLeft(sender:UISwipeGestureRecognizer){
+        print("swiped left")
+    }
+    
+    func swipedUp(sender:UISwipeGestureRecognizer){
+        print("swiped up")
+    }
+    
+    func swipedDown(sender:UISwipeGestureRecognizer){
+        print("swiped down")
+    }
+    
+    
     override func didMove(to view: SKView) {
         
         
+        let swipeRight:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedRight(sender:)));
+        swipeRight.direction = .right
+        view.addGestureRecognizer(swipeRight)
+        
+        
+        let swipeLeft:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedLeft(sender:)));
+        swipeLeft.direction = .left;
+        view.addGestureRecognizer(swipeLeft)
+        
+        
+        let swipeUp:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedUp(sender:)));
+        swipeUp.direction = .up
+        view.addGestureRecognizer(swipeUp)
+        
+        
+        let swipeDown:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedDown(sender:)));
+        swipeDown.direction = .down
+        view.addGestureRecognizer(swipeDown)
         
         self.physicsWorld.gravity = CGVector.zero;
         self.physicsWorld.contactDelegate = self;
         
+        let shape = SKShapeNode()
+        shape.path = UIBezierPath(roundedRect: CGRect(x: -128, y: -128, width: 256, height: 256), cornerRadius: 64).cgPath
+        shape.position = CGPoint(x: frame.midX, y: frame.midY)
+        shape.fillColor = UIColor.red
+        shape.strokeColor = UIColor.blue
+        shape.glowWidth = 10;
+        
+        shape.lineWidth = 10
+        addChild(shape)
         
 
         // 2
-        backgroundColor = SKColor.white
+        backgroundColor = SKColor.green;
         // 3
         player.setPosition(myPosition: CGPoint(x: size.width / 2 , y: size.height * 0.9));
         // 4
@@ -120,6 +164,8 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         projectile.physicsBody?.contactTestBitMask = PhysicsCategory.Monster
         projectile.physicsBody?.collisionBitMask = PhysicsCategory.None
         projectile.physicsBody?.usesPreciseCollisionDetection = true
+        
+        
         
         // 3) determin offset of location to projectile
         let offset = touchLocation - projectile.position;
