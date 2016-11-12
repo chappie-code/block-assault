@@ -49,9 +49,10 @@ class Player {
         shape.path = UIBezierPath(roundedRect: CGRect(x: -5, y: 0, width: 10, height: 50), cornerRadius: 2).cgPath
         shape.position = CGPoint(x: self.getPosition().x,y: self.getPosition().y - 100) ;
         
-        shape.fillColor = UIColor.red
-        shape.strokeColor = UIColor.blue
-        shape.glowWidth = 5;
+        
+        shape.strokeColor = UIColor(colorLiteralRed: 0.7, green: 0.7, blue: 0.9, alpha: 0.5)
+    
+        shape.glowWidth = 2;
         
         
         shape.lineWidth = 10

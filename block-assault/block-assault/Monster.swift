@@ -43,7 +43,7 @@ class Monster{
     {
         // Determine speed of the monster
         
-        let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
+        let actualDuration = random(min: CGFloat(4.0), max: CGFloat(10.0))
         let roationAmount = random(min:CGFloat(0), max:CGFloat(2.0));
         
         let rotateAction = SKAction.rotate(byAngle: roationAmount, duration: 0);
