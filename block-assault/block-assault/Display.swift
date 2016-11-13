@@ -24,14 +24,14 @@ class Display {
         let c:String = String(format:"%.1f", player.healthMax);
         healthLabel.text = c;
         healthLabel.fontSize = 40;
-        healthLabel.fontColor = SKColor.black;
+        healthLabel.fontColor = SKColor.white;
         healthLabel.position = CGPoint(x: 50, y: 0);
         
         self.scoreLabel = SKLabelNode(fontNamed: "Helvetica-BoldOblique")
         let c2:String = String(format:"%d", 0);
         scoreLabel.text = c2;
         scoreLabel.fontSize = 40;
-        scoreLabel.fontColor = SKColor.black;
+        scoreLabel.fontColor = SKColor.white;
         scoreLabel.position = CGPoint(x: 50, y: 50);
     }
     

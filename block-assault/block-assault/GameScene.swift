@@ -124,11 +124,11 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                 
 
         // 2
-        backgroundColor = SKColor.green;
+        backgroundColor = SKColor.black;
         // 3
-        player.setPosition(myPosition: CGPoint(x: size.width / 2 , y: size.height * 0.9));
+        
         // 4
-        addChild(player.spriteObject);
+        //addChild(player.spriteObject);
         addChild(display.healthLabel);
         addChild(display.scoreLabel);
         
@@ -150,22 +150,26 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         // 2) Set up initial location of projectile
         
-        let projectile = SKSpriteNode(imageNamed: "projectile");
-        projectile.position = player.getPosition();
+        let shapeObject = SKShapeNode(rectOf: CGSize(width: 2, height: 2));
+        
+        shapeObject.strokeColor = SKColor.white;
+        shapeObject.glowWidth = 1.0;
+        shapeObject.fillColor = SKColor.orange;
+        shapeObject.position = player.getPosition();
         
         
         
-        projectile.physicsBody = SKPhysicsBody(circleOfRadius: projectile.size.width/2)
-        projectile.physicsBody?.isDynamic = true
-        projectile.physicsBody?.categoryBitMask = PhysicsCategory.Projectile
-        projectile.physicsBody?.contactTestBitMask = PhysicsCategory.Monster
-        projectile.physicsBody?.collisionBitMask = PhysicsCategory.None
-        projectile.physicsBody?.usesPreciseCollisionDetection = true
+        shapeObject.physicsBody = SKPhysicsBody(rectangleOf: CGSize( width: 2, height: 2))
+        shapeObject.physicsBody?.isDynamic = true
+        shapeObject.physicsBody?.categoryBitMask = PhysicsCategory.Projectile
+        shapeObject.physicsBody?.contactTestBitMask = PhysicsCategory.Monster
+        shapeObject.physicsBody?.collisionBitMask = PhysicsCategory.None
+        shapeObject.physicsBody?.usesPreciseCollisionDetection = true
         
         
         
         // 3) determin offset of location to projectile
-        let offset = touchLocation - projectile.position;
+        let offset = touchLocation - shapeObject.position;
         
         // 4) Bail out if you are shooting down or backwards
         /*
@@ -177,7 +181,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         // 5) Ok to add now - you've double checked position
         
-        addChild(projectile);
+        addChild(shapeObject);
         
         // 6) get the direction of where to shoot
         let direction = offset.normalized();
@@ -186,12 +190,12 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         let shootAmount = direction * 1000;
         
         // 8) Add the shot amount to the current position
-        let realDest = shootAmount + projectile.position;
+        let realDest = shootAmount + shapeObject.position;
         
         // 9) Create the action
         let actionMove = SKAction.move(to: realDest,duration: 2.0);
         let actionMoveDone = SKAction.removeFromParent();
-        projectile.run(SKAction.sequence([actionMove,actionMoveDone]));
+        shapeObject.run(SKAction.sequence([actionMove,actionMoveDone]));
         
     }
     
@@ -216,18 +220,18 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         // 2
         if ((firstBody.categoryBitMask == PhysicsCategory.Monster) && (secondBody.categoryBitMask == PhysicsCategory.Projectile))
         {
-            projectileDidCollideWithMonster(monster: firstBody.node as! SKSpriteNode, projectile: secondBody.node as! SKSpriteNode)
+            projectileDidCollideWithMonster(monster: firstBody.node as! SKSpriteNode, projectile: secondBody.node as! SKShapeNode)
         }
         if ((firstBody.categoryBitMask == PhysicsCategory.Player) && (secondBody.categoryBitMask == PhysicsCategory.Monster))
         {
-            monsterDidCollideWithPlayer(player: firstBody.node as! SKSpriteNode, monster: secondBody.node as! SKSpriteNode);
+            monsterDidCollideWithPlayer(player: firstBody.node as! SKShapeNode, monster: secondBody.node as! SKSpriteNode);
         }
         
         
     }
     
     
-    func monsterDidCollideWithPlayer(player:SKSpriteNode, monster:SKSpriteNode) {
+    func monsterDidCollideWithPlayer(player:SKShapeNode, monster:SKSpriteNode) {
         print("Hit Player")
         
         monster.removeFromParent();
@@ -238,7 +242,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         print(self.player.health);
     }
     
-    func projectileDidCollideWithMonster(monster:SKSpriteNode, projectile:SKSpriteNode) {
+    func projectileDidCollideWithMonster(monster:SKSpriteNode, projectile:SKShapeNode) {
         print("Hit")
         projectile.removeFromParent()
         monster.removeFromParent()

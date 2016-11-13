@@ -12,8 +12,9 @@ import SpriteKit
 
 class Player {
     var health = 100.0;
-    var spriteObject:SKSpriteNode;
-    var spriteName:String;
+    // var spriteObject:SKSpriteNode;
+    var shapeObject:SKShapeNode;
+    // var spriteName:String;
     var size:CGSize;
     var position:CGPoint?;
     var healthMax:CGFloat = 100.0;
@@ -23,7 +24,9 @@ class Player {
     
     init()
     {
-        spriteName = "player";
+        
+        // spriteName = "player";
+        /*
         spriteObject = SKSpriteNode(imageNamed: spriteName);
         spriteObject.physicsBody = SKPhysicsBody(rectangleOf: spriteObject.size);
         spriteObject.physicsBody?.isDynamic = true;
@@ -31,16 +34,47 @@ class Player {
         spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.None
         spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None
         spriteObject.physicsBody?.usesPreciseCollisionDetection = true;
+        */
         
-        size = spriteObject.size;
+        shapeObject = SKShapeNode(rect: CGRect(x: -5, y: 0, width: 10, height: 10));
+        
+        shapeObject.strokeColor = SKColor.white
+        shapeObject.glowWidth = 2.0
+        shapeObject.fillColor = SKColor.orange
+        
+        shapeObject.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 10, height: 10));
+        shapeObject.physicsBody?.isDynamic = true;
+        shapeObject.physicsBody?.categoryBitMask = PhysicsCategory.Player
+        shapeObject.physicsBody?.contactTestBitMask = PhysicsCategory.None
+        shapeObject.physicsBody?.collisionBitMask = PhysicsCategory.None
+        shapeObject.physicsBody?.usesPreciseCollisionDetection = true;
+        
+        size = CGSize(width: 10, height: 10);
+        
+        
         
         parentScene = SKScene();
         
+        
+        
+    }
+    
+    func drawObject()
+    {
+        self.setPosition(myPosition: CGPoint(x: parentScene.size.width / 2 , y: parentScene.size.height * 0.9));
+        
+        
+        self.parentScene.addChild(self.shapeObject);
+    
+
     }
     
     func setParentScene(scene:SKScene)
     {
         self.parentScene = scene;
+        
+        
+        drawObject();
     }
     
     func swordAnimation()
@@ -55,7 +89,8 @@ class Player {
         shape.glowWidth = 2;
         
         
-        shape.lineWidth = 10
+        shape.lineWidth = 2;
+        
         
         
         let actionMove = SKAction.move(to: CGPoint(x: self.getPosition().x, y: self.getPosition().y + 30), duration: 1)
@@ -94,7 +129,7 @@ class Player {
     func setPosition(myPosition:CGPoint)
     {
         self.position = myPosition;
-        self.spriteObject.position = myPosition;
+        self.shapeObject.position = myPosition;
     }
     
     func getPosition() -> CGPoint {
