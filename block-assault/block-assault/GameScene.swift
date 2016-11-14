@@ -69,7 +69,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         super.init(size: size);
         
         
-        self.player.setParentScene(scene: self.scene!);
+       
         
         
     }
@@ -98,6 +98,23 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         
+        self.player.setParentScene(scene: self.scene!);
+        print("set scene");
+        
+        let background = SKSpriteNode(color: SKColor.lightGray, size: size)
+        
+        let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
+        background.position = center
+        background.lightingBitMask = 1
+        addChild(background);
+        /*
+        let light = SKLightNode()
+        light.position = center
+        light.falloff = 1.0
+        light.lightColor = SKColor(hue: 0.62 , saturation: 0.89, brightness: 1.0, alpha: 0.4)
+        light.shadowColor = SKColor.black.withAlphaComponent(0.4)
+        addChild(light);
+        */
         
         let swipeRight:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedRight(sender:)));
         swipeRight.direction = .right
@@ -122,13 +139,9 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self;
         
                 
-
-        // 2
-        backgroundColor = SKColor.black;
-        // 3
+        addChild(player.spriteObject);
         
-        // 4
-        //addChild(player.spriteObject);
+        
         addChild(display.healthLabel);
         addChild(display.scoreLabel);
         
@@ -153,7 +166,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         let shapeObject = SKShapeNode(rectOf: CGSize(width: 2, height: 2));
         
         shapeObject.strokeColor = SKColor.white;
-        shapeObject.glowWidth = 1.0;
+        
         shapeObject.fillColor = SKColor.orange;
         shapeObject.position = player.getPosition();
         
@@ -193,7 +206,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         let realDest = shootAmount + shapeObject.position;
         
         // 9) Create the action
-        let actionMove = SKAction.move(to: realDest,duration: 2.0);
+        let actionMove = SKAction.move(to: realDest,duration: 4.0);
         let actionMoveDone = SKAction.removeFromParent();
         shapeObject.run(SKAction.sequence([actionMove,actionMoveDone]));
         

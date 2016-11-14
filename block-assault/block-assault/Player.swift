@@ -12,30 +12,32 @@ import SpriteKit
 
 class Player {
     var health = 100.0;
-    // var spriteObject:SKSpriteNode;
-    var shapeObject:SKShapeNode;
+     var spriteObject:SKSpriteNode;
+    //var shapeObject:SKShapeNode;
     // var spriteName:String;
     var size:CGSize;
     var position:CGPoint?;
     var healthMax:CGFloat = 100.0;
     var score:Int = 0;
     var parentScene:SKScene;
+    //var lightingNode:SKLightNode;
     
     
     init()
     {
         
         // spriteName = "player";
-        /*
-        spriteObject = SKSpriteNode(imageNamed: spriteName);
+        
+        spriteObject = SKSpriteNode(color: UIColor.blue, size: CGSize(width: 4, height: 4));
+        spriteObject.lightingBitMask = 1;
         spriteObject.physicsBody = SKPhysicsBody(rectangleOf: spriteObject.size);
         spriteObject.physicsBody?.isDynamic = true;
         spriteObject.physicsBody?.categoryBitMask = PhysicsCategory.Player
         spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.None
         spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None
         spriteObject.physicsBody?.usesPreciseCollisionDetection = true;
-        */
         
+        /*
         shapeObject = SKShapeNode(rect: CGRect(x: -5, y: 0, width: 10, height: 10));
         
         shapeObject.strokeColor = SKColor.white
@@ -49,8 +51,9 @@ class Player {
         shapeObject.physicsBody?.collisionBitMask = PhysicsCategory.None
         shapeObject.physicsBody?.usesPreciseCollisionDetection = true;
         
-        size = CGSize(width: 10, height: 10);
         
+        */
+        size = spriteObject.size;
         
         
         parentScene = SKScene();
@@ -61,20 +64,23 @@ class Player {
     
     func drawObject()
     {
-        self.setPosition(myPosition: CGPoint(x: parentScene.size.width / 2 , y: parentScene.size.height * 0.9));
         
         
-        self.parentScene.addChild(self.shapeObject);
+        
+        
+//        self.parentScene.addChild(self.spriteObject);
     
 
     }
     
+   
+    
     func setParentScene(scene:SKScene)
     {
         self.parentScene = scene;
+        spriteObject.position = CGPoint(x: parentScene.size.width / 2 , y: parentScene.size.height * 0.9);
         
         
-        drawObject();
     }
     
     func swordAnimation()
@@ -129,7 +135,7 @@ class Player {
     func setPosition(myPosition:CGPoint)
     {
         self.position = myPosition;
-        self.shapeObject.position = myPosition;
+        self.spriteObject.position = myPosition;
     }
     
     func getPosition() -> CGPoint {
