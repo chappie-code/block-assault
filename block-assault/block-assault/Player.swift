@@ -16,7 +16,6 @@ class Player {
     //var shapeObject:SKShapeNode;
     // var spriteName:String;
     var size:CGSize;
-    var position:CGPoint?;
     var healthMax:CGFloat = 100.0;
     var score:Int = 0;
     var parentScene:SKScene;
@@ -28,14 +27,16 @@ class Player {
         
         // spriteName = "player";
         
-        spriteObject = SKSpriteNode(color: UIColor.blue, size: CGSize(width: 4, height: 4));
+        spriteObject = SKSpriteNode(color: UIColor.blue, size: CGSize(width: 20, height: 20));
+        
         spriteObject.lightingBitMask = 1;
+        
         spriteObject.physicsBody = SKPhysicsBody(rectangleOf: spriteObject.size);
         spriteObject.physicsBody?.isDynamic = true;
         spriteObject.physicsBody?.categoryBitMask = PhysicsCategory.Player
         spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.None
         spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None
-        spriteObject.physicsBody?.usesPreciseCollisionDetection = true;
+        spriteObject.physicsBody?.usesPreciseCollisionDetection = false;
         
         /*
         shapeObject = SKShapeNode(rect: CGRect(x: -5, y: 0, width: 10, height: 10));
@@ -53,6 +54,7 @@ class Player {
         
         
         */
+        
         size = spriteObject.size;
         
         
@@ -60,27 +62,22 @@ class Player {
         
         
         
+        
     }
     
-    func drawObject()
-    {
-        
-        
-        
-        
-//        self.parentScene.addChild(self.spriteObject);
-    
-
-    }
-    
-   
     
     func setParentScene(scene:SKScene)
     {
         self.parentScene = scene;
+        
         spriteObject.position = CGPoint(x: parentScene.size.width / 2 , y: parentScene.size.height * 0.9);
         
-        
+        var light = SKLightNode();
+        light.position = CGPoint(x: 0,y: 0)
+        light.falloff = 0.3;
+        light.isEnabled = true;
+        light.lightColor = UIColor.blue;
+        spriteObject.addChild(light);
     }
     
     func swordAnimation()
@@ -90,7 +87,7 @@ class Player {
         shape.position = CGPoint(x: self.getPosition().x,y: self.getPosition().y - 100) ;
         
         
-        shape.strokeColor = UIColor(colorLiteralRed: 0.7, green: 0.7, blue: 0.9, alpha: 0.5)
+        shape.strokeColor = UIColor(colorLiteralRed: 0.7, green: 0.7, blue: 0.9, alpha: 0.9)
     
         shape.glowWidth = 2;
         
@@ -134,12 +131,11 @@ class Player {
     
     func setPosition(myPosition:CGPoint)
     {
-        self.position = myPosition;
         self.spriteObject.position = myPosition;
     }
     
     func getPosition() -> CGPoint {
-        return self.position!;
+        return self.spriteObject.position;
     }
     
     func random() -> CGFloat {

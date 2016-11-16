@@ -101,7 +101,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         self.player.setParentScene(scene: self.scene!);
         print("set scene");
         
-        let background = SKSpriteNode(color: SKColor.lightGray, size: size)
+        let background = SKSpriteNode(color: SKColor.black, size: size)
         
         let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
         background.position = center
@@ -237,14 +237,14 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         }
         if ((firstBody.categoryBitMask == PhysicsCategory.Player) && (secondBody.categoryBitMask == PhysicsCategory.Monster))
         {
-            monsterDidCollideWithPlayer(player: firstBody.node as! SKShapeNode, monster: secondBody.node as! SKSpriteNode);
+            monsterDidCollideWithPlayer(player: firstBody.node as! SKSpriteNode, monster: secondBody.node as! SKSpriteNode);
         }
         
         
     }
     
     
-    func monsterDidCollideWithPlayer(player:SKShapeNode, monster:SKSpriteNode) {
+    func monsterDidCollideWithPlayer(player:SKSpriteNode, monster:SKSpriteNode) {
         print("Hit Player")
         
         monster.removeFromParent();

@@ -228,7 +228,7 @@
 				TargetAttributes = {
 					F0A9378C1D5034EF006CD7CB = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = G7B8JFPW9S;
+						DevelopmentTeam = DWNJB63V3J;
 						LastSwiftMigration = 0800;
 					};
 					F0A937A41D5034F4006CD7CB = {
@@ -458,6 +458,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "block-assault/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.logical-development.block-assault";
@@ -470,6 +471,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "block-assault/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.logical-development.block-assault";

@@ -12,21 +12,24 @@ import SpriteKit
 
 class Monster{
     
-    var spriteName:String;
+    
     var spriteObject:SKSpriteNode;
     var position:CGPoint?;
     var size:CGSize;
     
     init()
     {
-        spriteName = "monster";
-        spriteObject = SKSpriteNode(imageNamed: spriteName);
+        spriteObject = SKSpriteNode(color: UIColor.red, size: CGSize(width: 20, height: 20));
+        
+        spriteObject.lightingBitMask = 1;
+
         spriteObject.physicsBody = SKPhysicsBody(rectangleOf: spriteObject.size);
         spriteObject.physicsBody?.isDynamic = true;
         spriteObject.physicsBody?.categoryBitMask = PhysicsCategory.Monster
         spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.Projectile
         spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None;
         spriteObject.physicsBody?.usesPreciseCollisionDetection = true;
+        spriteObject.lightingBitMask = 1;
         
         size = spriteObject.size;
         
@@ -37,6 +40,13 @@ class Monster{
     {
         self.position = myPosition;
         self.spriteObject.position = myPosition;
+        
+        var light = SKLightNode();
+        light.position = CGPoint(x: 0,y: 0)
+        light.falloff = 0.1;
+        light.lightColor = UIColor.red;
+        light.isEnabled = true;
+        spriteObject.addChild(light);
     }
     
     func attack(playerPosition:CGPoint)
