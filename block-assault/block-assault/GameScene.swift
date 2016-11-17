@@ -92,7 +92,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     func swipedDown(sender:UISwipeGestureRecognizer){
         print("swiped down");
-        player.swordAnimation();
+        player.swordSwing();
     }
     
     

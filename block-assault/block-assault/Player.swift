@@ -20,6 +20,7 @@ class Player {
     var score:Int = 0;
     var parentScene:SKScene;
     //var lightingNode:SKLightNode;
+    var weapon:Weapons;
     
     
     init()
@@ -38,28 +39,11 @@ class Player {
         spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None
         spriteObject.physicsBody?.usesPreciseCollisionDetection = false;
         
-        /*
-        shapeObject = SKShapeNode(rect: CGRect(x: -5, y: 0, width: 10, height: 10));
-        
-        shapeObject.strokeColor = SKColor.white
-        shapeObject.glowWidth = 2.0
-        shapeObject.fillColor = SKColor.orange
-        
-        shapeObject.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 10, height: 10));
-        shapeObject.physicsBody?.isDynamic = true;
-        shapeObject.physicsBody?.categoryBitMask = PhysicsCategory.Player
-        shapeObject.physicsBody?.contactTestBitMask = PhysicsCategory.None
-        shapeObject.physicsBody?.collisionBitMask = PhysicsCategory.None
-        shapeObject.physicsBody?.usesPreciseCollisionDetection = true;
-        
-        
-        */
-        
         size = spriteObject.size;
         
         
         parentScene = SKScene();
-        
+        weapon = Weapons(shooterType: "player", parentScene: self.parentScene);
         
         
         
@@ -68,11 +52,15 @@ class Player {
     
     func setParentScene(scene:SKScene)
     {
+        // set parents
         self.parentScene = scene;
+        self.weapon.parentScene = scene;
+        
+        
         
         spriteObject.position = CGPoint(x: parentScene.size.width / 2 , y: parentScene.size.height * 0.9);
         
-        var light = SKLightNode();
+        let light = SKLightNode();
         light.position = CGPoint(x: 0,y: 0)
         light.falloff = 0.3;
         light.isEnabled = true;
@@ -80,35 +68,9 @@ class Player {
         spriteObject.addChild(light);
     }
     
-    func swordAnimation()
+    func swordSwing()
     {
-        let shape = SKShapeNode()
-        shape.path = UIBezierPath(roundedRect: CGRect(x: -5, y: 0, width: 10, height: 50), cornerRadius: 2).cgPath
-        shape.position = CGPoint(x: self.getPosition().x,y: self.getPosition().y - 100) ;
-        
-        
-        shape.strokeColor = UIColor(colorLiteralRed: 0.7, green: 0.7, blue: 0.9, alpha: 0.9)
-    
-        shape.glowWidth = 2;
-        
-        
-        shape.lineWidth = 2;
-        
-        
-        
-        let actionMove = SKAction.move(to: CGPoint(x: self.getPosition().x, y: self.getPosition().y + 30), duration: 1)
-        let actionMoveDone = SKAction.removeFromParent()
-        
-        
-        self.parentScene.addChild(shape)
-        
-        shape.run(SKAction.sequence([ actionMove, actionMoveDone]));
-        
-        
-        
-        
-        
-        
+        weapon.swordAnimation(fromPosition: self.getPosition())
 
     }
     

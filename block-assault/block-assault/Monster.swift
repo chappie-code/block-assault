@@ -41,7 +41,7 @@ class Monster{
         self.position = myPosition;
         self.spriteObject.position = myPosition;
         
-        var light = SKLightNode();
+        let light = SKLightNode();
         light.position = CGPoint(x: 0,y: 0)
         light.falloff = 0.1;
         light.lightColor = UIColor.red;
