@@ -80,10 +80,12 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     func swipedRight(sender:UISwipeGestureRecognizer){
         print("swiped right")
+        player.moveRight();
     }
     
     func swipedLeft(sender:UISwipeGestureRecognizer){
         print("swiped left")
+        player.moveLeft();
     }
     
     func swipedUp(sender:UISwipeGestureRecognizer){

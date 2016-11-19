@@ -91,6 +91,24 @@ class Player {
         
     }
     
+    func moveLeft(by:CGFloat = 30)
+    {
+        let moveAction = SKAction.moveTo(x: self.getPosition().x - by, duration: 0.4);
+       
+        self.spriteObject.run(moveAction);
+
+        
+    }
+    func moveRight(by:CGFloat = 30)
+    {
+        let moveAction = SKAction.moveTo(x: self.getPosition().x + by, duration: 0.4);
+        
+        self.spriteObject.run(moveAction);
+        
+        
+    }
+
+    
     func setPosition(myPosition:CGPoint)
     {
         self.spriteObject.position = myPosition;

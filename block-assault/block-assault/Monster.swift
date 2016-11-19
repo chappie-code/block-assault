@@ -16,6 +16,8 @@ class Monster{
     var spriteObject:SKSpriteNode;
     var position:CGPoint?;
     var size:CGSize;
+    var health:Int;
+    var lastKnownPlayerPosition:CGPoint?;
     
     init()
     {
@@ -32,6 +34,8 @@ class Monster{
         spriteObject.lightingBitMask = 1;
         
         size = spriteObject.size;
+        
+        health = 5;
         
     }
     
@@ -62,6 +66,12 @@ class Monster{
         
         
         self.spriteObject.run(SKAction.sequence([rotateAction, actionMove, actionMoveDone]));
+        
+    }
+    
+    func monsterHit(by:Int = 1)
+    {
+        self.health = self.health - 1;
         
     }
     
