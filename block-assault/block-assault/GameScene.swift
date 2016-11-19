@@ -141,7 +141,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self;
         
                 
-        addChild(player.spriteObject);
+        addChild(player);
         
         
         addChild(display.healthLabel);
@@ -235,35 +235,44 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         // 2
         if ((firstBody.categoryBitMask == PhysicsCategory.Monster) && (secondBody.categoryBitMask == PhysicsCategory.Projectile))
         {
-            projectileDidCollideWithMonster(monster: firstBody.node as! SKSpriteNode, projectile: secondBody.node as! SKShapeNode)
+            projectileDidCollideWithMonster(monster: firstBody.node as! Monster, projectile: secondBody.node as! SKShapeNode)
         }
         if ((firstBody.categoryBitMask == PhysicsCategory.Player) && (secondBody.categoryBitMask == PhysicsCategory.Monster))
         {
-            monsterDidCollideWithPlayer(player: firstBody.node as! SKSpriteNode, monster: secondBody.node as! SKSpriteNode);
+            monsterDidCollideWithPlayer(player: firstBody.node as! Player, monster: secondBody.node as! Monster);
         }
         
         
     }
     
     
-    func monsterDidCollideWithPlayer(player:SKSpriteNode, monster:SKSpriteNode) {
+    func monsterDidCollideWithPlayer(player:Player, monster:Monster) {
         print("Hit Player")
         
         monster.removeFromParent();
         
         
-        self.player.removeHealth(by: 5) ;
-        self.display.updateHealth(health: self.player.getHealth());
+        player.removeHealth(by: 5) ;
+        self.display.updateHealth(health: player.health);
         print(self.player.health);
     }
     
-    func projectileDidCollideWithMonster(monster:SKSpriteNode, projectile:SKShapeNode) {
+    func projectileDidCollideWithMonster(monster:Monster, projectile:SKShapeNode) {
         print("Hit")
         projectile.removeFromParent()
-        monster.removeFromParent()
         
-        monstersDestroyed += 1;
-        player.updateScore(increase: 1);
+        
+        monster.reduceHealth()
+        if(monster.health == 0)
+        {
+            print("Killed");
+            monster.removeFromParent();
+            player.updateScore(increase: 1);
+            monstersDestroyed += 1;
+        }
+        
+        
+        
         display.updateScore(score: player.getScore());
         
         
@@ -296,11 +305,11 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         let xPosition = random(min:0, max:self.size.width);
         let position = CGPoint(x: xPosition, y: yPosition);
         
-        myMonster.setPosition(myPosition: position);
+        myMonster.position = position; 
         
         
         // Add the monster to the scene
-        addChild(myMonster.spriteObject);
+        addChild(myMonster);
         
         myMonster.attack(playerPosition: player.getPosition());
         

@@ -10,17 +10,18 @@ import Foundation
 import SpriteKit
 
 
-class Player {
+class Player :SKSpriteNode {
     var health = 100.0;
-     var spriteObject:SKSpriteNode;
+     
     //var shapeObject:SKShapeNode;
     // var spriteName:String;
-    var size:CGSize;
+    
     var healthMax:CGFloat = 100.0;
     var score:Int = 0;
     var parentScene:SKScene;
-    //var lightingNode:SKLightNode;
+    
     var weapon:Weapons;
+    var enableLighting:Bool;
     
     
     init()
@@ -28,25 +29,46 @@ class Player {
         
         // spriteName = "player";
         
-        spriteObject = SKSpriteNode(color: UIColor.blue, size: CGSize(width: 20, height: 20));
+       
+        enableLighting = false;
         
-        spriteObject.lightingBitMask = 1;
-        
-        spriteObject.physicsBody = SKPhysicsBody(rectangleOf: spriteObject.size);
-        spriteObject.physicsBody?.isDynamic = true;
-        spriteObject.physicsBody?.categoryBitMask = PhysicsCategory.Player
-        spriteObject.physicsBody?.contactTestBitMask = PhysicsCategory.None
-        spriteObject.physicsBody?.collisionBitMask = PhysicsCategory.None
-        spriteObject.physicsBody?.usesPreciseCollisionDetection = false;
-        
-        size = spriteObject.size;
         
         
         parentScene = SKScene();
         weapon = Weapons(shooterType: "player", parentScene: self.parentScene);
         
+        let texture = SKTexture(noiseWithSmoothness: 0.9, size: CGSize(width: 20, height: 20), grayscale: true);
+        enableLighting = false;
+        
+        super.init(texture: texture, color: UIColor.blue, size: CGSize(width: 20, height: 20));
+        self.colorBlendFactor = 0.5;
+        self.lightingBitMask = 1;
+        
+        self.physicsBody = SKPhysicsBody(rectangleOf: self.size);
+        self.physicsBody?.isDynamic = true;
+        self.physicsBody?.categoryBitMask = PhysicsCategory.Player
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.None
+        self.physicsBody?.collisionBitMask = PhysicsCategory.None
+        self.physicsBody?.usesPreciseCollisionDetection = false;
         
         
+        
+        
+        if(enableLighting)
+        {
+            let light = SKLightNode();
+            light.position = CGPoint(x: 0,y: 0)
+            light.falloff = 0.1;
+            light.lightColor = UIColor.red;
+            light.isEnabled = true;
+            self.addChild(light);
+        }
+
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     
@@ -56,16 +78,7 @@ class Player {
         self.parentScene = scene;
         self.weapon.parentScene = scene;
         
-        
-        
-        spriteObject.position = CGPoint(x: parentScene.size.width / 2 , y: parentScene.size.height * 0.9);
-        
-        let light = SKLightNode();
-        light.position = CGPoint(x: 0,y: 0)
-        light.falloff = 0.3;
-        light.isEnabled = true;
-        light.lightColor = UIColor.blue;
-        spriteObject.addChild(light);
+        self.position = CGPoint(x: parentScene.size.width / 2 , y: parentScene.size.height * 0.9);
     }
     
     func swordSwing()
@@ -95,7 +108,7 @@ class Player {
     {
         let moveAction = SKAction.moveTo(x: self.getPosition().x - by, duration: 0.4);
        
-        self.spriteObject.run(moveAction);
+        self.run(moveAction);
 
         
     }
@@ -103,7 +116,7 @@ class Player {
     {
         let moveAction = SKAction.moveTo(x: self.getPosition().x + by, duration: 0.4);
         
-        self.spriteObject.run(moveAction);
+        self.run(moveAction);
         
         
     }
@@ -111,11 +124,11 @@ class Player {
     
     func setPosition(myPosition:CGPoint)
     {
-        self.spriteObject.position = myPosition;
+        self.position = myPosition;
     }
     
     func getPosition() -> CGPoint {
-        return self.spriteObject.position;
+        return self.position;
     }
     
     func random() -> CGFloat {
