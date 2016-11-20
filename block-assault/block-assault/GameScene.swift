@@ -103,20 +103,16 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         self.player.setParentScene(scene: self.scene!);
         print("set scene");
         
-        let background = SKSpriteNode(color: SKColor.black, size: size)
+        let texture = SKTexture(noiseWithSmoothness: 0.9, size: CGSize(width: 20, height: 20), grayscale: true);
+        
+        let background = SKSpriteNode(texture: texture, color: UIColor.black, size: self.size)
+        background.colorBlendFactor = 0.5;
         
         let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
         background.position = center
         background.lightingBitMask = 1
         addChild(background);
-        /*
-        let light = SKLightNode()
-        light.position = center
-        light.falloff = 1.0
-        light.lightColor = SKColor(hue: 0.62 , saturation: 0.89, brightness: 1.0, alpha: 0.4)
-        light.shadowColor = SKColor.black.withAlphaComponent(0.4)
-        addChild(light);
-        */
+       
         
         let swipeRight:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedRight(sender:)));
         swipeRight.direction = .right
@@ -224,6 +220,9 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         // 1
         var firstBody: SKPhysicsBody
         var secondBody: SKPhysicsBody
+        
+        
+        
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
             firstBody = contact.bodyA
             secondBody = contact.bodyB
@@ -232,10 +231,22 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             secondBody = contact.bodyA
         }
         
+        if (firstBody.node == nil || secondBody == nil)
+        {
+            return;
+            
+        }
+        
         // 2
         if ((firstBody.categoryBitMask == PhysicsCategory.Monster) && (secondBody.categoryBitMask == PhysicsCategory.Projectile))
         {
-            projectileDidCollideWithMonster(monster: firstBody.node as! Monster, projectile: secondBody.node as! SKShapeNode)
+            
+                let monster:Monster = firstBody.node as! Monster;
+            
+            let projectile:SKShapeNode = secondBody.node as! SKShapeNode;
+            
+            
+            projectileDidCollideWithMonster(monster: monster, projectile: projectile)
         }
         if ((firstBody.categoryBitMask == PhysicsCategory.Player) && (secondBody.categoryBitMask == PhysicsCategory.Monster))
         {

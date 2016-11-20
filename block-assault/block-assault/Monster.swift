@@ -76,9 +76,11 @@ class Monster : SKSpriteNode{
     
     func attack(playerPosition:CGPoint)
     {
-        // Determine speed of the monster
         
-        
+        if(self.lastKnownPlayerPosition != playerPosition)
+        {
+            self.lastKnownPlayerPosition = playerPosition;
+        }
         
         let distance = self.distanceBetween(pointOne: playerPosition, pointTwo: self.position)
         
@@ -99,7 +101,7 @@ class Monster : SKSpriteNode{
     {
         self.health = self.health - 1;
         self.velocity = self.velocity - 3;
-        
+        self.attack(playerPosition: self.lastKnownPlayerPosition!);
     }
     
     func random() -> CGFloat {
