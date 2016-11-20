@@ -19,11 +19,13 @@ class Monster : SKSpriteNode{
     var lastKnownPlayerPosition:CGPoint?;
     var enableLighting:Bool;
     var velocity:CGFloat;
+    var timeElapsedSinceLastThought:CFTimeInterval;
     
     init()
     {
         self.health = 5;
         self.velocity = 15;
+        self.timeElapsedSinceLastThought = 0;
         
         let texture = SKTexture(noiseWithSmoothness: 0.9, size: CGSize(width: 20, height: 20), grayscale: true);
         enableLighting = false;
@@ -85,15 +87,27 @@ class Monster : SKSpriteNode{
         let distance = self.distanceBetween(pointOne: playerPosition, pointTwo: self.position)
         
         let actualDuration = self.getTravelTimeFor(distance: distance);
-        let roationAmount = random(min:CGFloat(0), max:CGFloat(2.0));
+        //let roationAmount = random(min:CGFloat(0), max:CGFloat(2.0));
         
-        let rotateAction = SKAction.rotate(byAngle: roationAmount, duration: 0);
+        
         let actionMove = SKAction.move(to: playerPosition, duration: TimeInterval(actualDuration))
         
         let actionMoveDone = SKAction.removeFromParent()
         
+        self.removeAllActions();
+        self.run(SKAction.sequence([actionMove, actionMoveDone]), withKey: "Attack Player");
         
-        self.run(SKAction.sequence([rotateAction, actionMove, actionMoveDone]));
+    }
+    
+    func think(_ currentTime: CFTimeInterval)
+    {
+        
+        let newCurrentTime = currentTime / 1000;
+        self.timeElapsedSinceLastThought = (self.timeElapsedSinceLastThought) + newCurrentTime;
+        
+
+        
+        print(self.timeElapsedSinceLastThought);
         
     }
     

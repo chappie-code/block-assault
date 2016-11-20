@@ -231,8 +231,9 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             secondBody = contact.bodyA
         }
         
-        if (firstBody.node == nil || secondBody == nil)
+        if (firstBody.node == nil || secondBody.node == nil)
         {
+            print("returned early - from collisions detection");
             return;
             
         }
@@ -296,6 +297,15 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     override func update(_ currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        for child in self.children {
+            if (child is Monster)
+            {
+                let monster = child as? Monster;
+                monster?.think(currentTime);
+                
+                
+            }
+        }
     }
     
     func random() -> CGFloat {
