@@ -9,6 +9,7 @@
 import SpriteKit
 
 
+
 struct PhysicsCategory {
     static let None         : UInt32 = 0
     static let All          : UInt32 = UInt32.max
@@ -300,8 +301,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         for child in self.children {
             if (child is Monster)
             {
-                let monster = child as? Monster;
-                monster?.think(currentTime);
+                if (player != nil)
+                {
+                    let monster = child as? Monster;
+                    monster?.updatePlayer(position: player.position);
+                    monster?.think(currentTime);
+                }
+                
                 
                 
             }
@@ -322,11 +328,12 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         
         let myMonster = Monster()
-        let yPosition = 0 - myMonster.size.height/2;
+        let yPosition = 200 - myMonster.size.height/2;
         let xPosition = random(min:0, max:self.size.width);
         let position = CGPoint(x: xPosition, y: yPosition);
         
-        myMonster.position = position; 
+        myMonster.position = position;
+        myMonster.lastKnownPlayerPosition = player.position;
         
         
         // Add the monster to the scene
@@ -335,6 +342,8 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         myMonster.attack(playerPosition: player.getPosition());
         
     }
+    
+    
     
     
     
