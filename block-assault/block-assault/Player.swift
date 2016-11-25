@@ -38,7 +38,7 @@ class Player :SKSpriteNode {
         weapon = Weapons(shooterType: "player", parentScene: self.parentScene);
         
         let texture = SKTexture(noiseWithSmoothness: 0.9, size: CGSize(width: 20, height: 20), grayscale: true);
-        enableLighting = false;
+        enableLighting = true;
         
         super.init(texture: texture, color: UIColor.blue, size: CGSize(width: 20, height: 20));
         self.colorBlendFactor = 0.5;

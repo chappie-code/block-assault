@@ -19,14 +19,15 @@ class Monster : SKSpriteNode{
     var health:Int;
     var lastKnownPlayerPosition:CGPoint;
     var enableLighting:Bool;
-    var velocity:CGFloat;
+    var velocity:CGVector;
+    var velocityAmount:CGFloat;
     var timeElapsedSinceLastThought:CFTimeInterval;
     var angle:CGFloat;
     
     init()
     {
         self.health = 5;
-        self.velocity = 15;
+        
         self.timeElapsedSinceLastThought = 0;
         self.lastKnownPlayerPosition = CGPoint(x: 0, y: 0);
         self.angle = 0;
@@ -34,28 +35,32 @@ class Monster : SKSpriteNode{
         let texture = SKTexture(noiseWithSmoothness: 0.9, size: CGSize(width: 20, height: 20), grayscale: true);
         enableLighting = false;
         
-        
+        self.velocity = CGVector(dx: 0, dy: 1);
+        self.velocityAmount = 15.0;
         super.init(texture: texture, color: UIColor.red, size: CGSize(width: 20, height: 20));
         
         self.colorBlendFactor = 0.5;
        
+        
 
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size);
         self.physicsBody?.isDynamic = true;
+        self.physicsBody?.affectedByGravity = false;
         self.physicsBody?.categoryBitMask = PhysicsCategory.Monster
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Projectile
         self.physicsBody?.collisionBitMask = PhysicsCategory.None;
         self.physicsBody?.usesPreciseCollisionDetection = true;
-        
+        self.physicsBody?.velocity = self.velocity;
         
         
         if(enableLighting)
         {
             let light = SKLightNode();
             light.position = CGPoint(x: 0,y: 0)
-            light.falloff = 0.1;
+            light.falloff = 0.999;
             light.lightColor = UIColor.red;
             light.isEnabled = true;
+            
             self.addChild(light);
         }
         
@@ -75,7 +80,7 @@ class Monster : SKSpriteNode{
     
     func getTravelTimeFor(distance:CGFloat) -> CGFloat
     {
-        return distance / self.velocity;
+        return 1.0;
     }
     
     
@@ -98,8 +103,11 @@ class Monster : SKSpriteNode{
         
         let actionMoveDone = SKAction.removeFromParent()
         
-        self.removeAllActions();
-        self.run(SKAction.sequence([actionMove, actionMoveDone]), withKey: "Attack Player");
+        //self.removeAllActions();
+        //self.run(SKAction.sequence([actionMove, actionMoveDone]), withKey: "Attack Player");
+        
+        self.velocity = CGVector(dx:10,dy:1);
+        self.physicsBody?.velocity = self.velocity
         
     }
     
@@ -122,7 +130,7 @@ class Monster : SKSpriteNode{
     func reduceHealth(by:Int = 1)
     {
         self.health = self.health - 1;
-        self.velocity = self.velocity - 3;
+        
         
     }
     
