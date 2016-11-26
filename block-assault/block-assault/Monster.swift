@@ -35,7 +35,7 @@ class Monster : SKSpriteNode{
         let texture = SKTexture(noiseWithSmoothness: 0.9, size: CGSize(width: 20, height: 20), grayscale: true);
         enableLighting = false;
         
-        self.velocity = CGVector(dx: 0, dy: 1);
+        self.velocity = CGVector(dx: 0, dy: 0);
         self.velocityAmount = 15.0;
         super.init(texture: texture, color: UIColor.red, size: CGSize(width: 20, height: 20));
         
@@ -50,7 +50,7 @@ class Monster : SKSpriteNode{
         self.physicsBody?.contactTestBitMask = PhysicsCategory.Projectile
         self.physicsBody?.collisionBitMask = PhysicsCategory.None;
         self.physicsBody?.usesPreciseCollisionDetection = true;
-        self.physicsBody?.velocity = self.velocity;
+        
         
         
         if(enableLighting)
@@ -88,26 +88,41 @@ class Monster : SKSpriteNode{
     func attack(playerPosition:CGPoint)
     {
         
+        //let direction:CGFloat  = getRotationTo(point: lastKnownPlayerPosition);
         
         
-        let distance = self.distanceBetween(pointOne: playerPosition, pointTwo: self.position)
+        //self.physicsBody?.applyForce(forceVector);
         
-        let actualDuration = self.getTravelTimeFor(distance: distance);
-        let rotationAmount = self.getRotationTo(point: playerPosition);
+        let path:CGMutablePath = CGMutablePath();
         
-        print(actualDuration);
-        print(lastKnownPlayerPosition);
+        path.move(to: self.position);
+        path.addLine(to: playerPosition);
+        let myPath:CGPath = path.copy()!;
         
-        let actionRotate = SKAction.rotate(byAngle: rotationAmount, duration: 0.5)
-        let actionMove = SKAction.move(to: playerPosition, duration: TimeInterval(actualDuration))
         
-        let actionMoveDone = SKAction.removeFromParent()
+        let actionMove:SKAction = SKAction.follow(myPath, asOffset: false, orientToPath: true, speed: velocityAmount);
+        
+        
+        self.run(actionMove);
+        
+        //let distance = self.distanceBetween(pointOne: playerPosition, pointTwo: self.position)
+        
+        //let actualDuration = self.getTravelTimeFor(distance: distance);
+        //let rotationAmount = self.getRotationTo(point: playerPosition);
+        
+        //print(actualDuration);
+        //print(lastKnownPlayerPosition);
+        
+        //let actionRotate = SKAction.rotate(byAngle: rotationAmount, duration: 0.5)
+        //let actionMove = SKAction.move(to: playerPosition, duration: TimeInterval(actualDuration))
+        
+        //let actionMoveDone = SKAction.removeFromParent()
         
         //self.removeAllActions();
         //self.run(SKAction.sequence([actionMove, actionMoveDone]), withKey: "Attack Player");
         
-        self.velocity = CGVector(dx:10,dy:1);
-        self.physicsBody?.velocity = self.velocity
+        //self.velocity = CGVector(dx:10,dy:1);
+        //self.physicsBody?.velocity = self.velocity
         
     }
     

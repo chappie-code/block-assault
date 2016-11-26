@@ -147,18 +147,20 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         run(SKAction.repeatForever(
             SKAction.sequence([
                 SKAction.run(addMonster),
-                SKAction.wait(forDuration: 1.0)
+                SKAction.wait(forDuration: 2.0)
                 ])
             ));
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("action");
+        //print("action");
         // 1) choose the touch to work with
         guard let touch = touches.first else{
             return;
         }
         let touchLocation = touch.location(in: self);
+        
+        print(touchLocation);
         
         // 2) Set up initial location of projectile
         
@@ -258,6 +260,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
     }
     
+    func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        let touch = touches.anyObject()! as! UITouch
+        let location = touch.location(in: self)
+        
+        print(location);
+    }
+    
     
     func monsterDidCollideWithPlayer(player:Player, monster:Monster) {
         print("Hit Player")
@@ -328,18 +337,20 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         
         let myMonster = Monster()
-        let yPosition = 200 - myMonster.size.height/2;
+        let yPosition = myMonster.size.height;
         let xPosition = random(min:0, max:self.size.width);
-        let position = CGPoint(x: xPosition, y: yPosition);
+        let position = CGPoint(x: xPosition, y: 0 - yPosition);
         
         myMonster.position = position;
-        myMonster.lastKnownPlayerPosition = player.position;
+        //myMonster.lastKnownPlayerPosition = player.position;
         
         
         // Add the monster to the scene
         addChild(myMonster);
         
-        myMonster.attack(playerPosition: player.getPosition());
+        myMonster.attack(playerPosition: player.position);
+        print(player.position)
+        
         
     }
     
