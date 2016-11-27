@@ -38,7 +38,7 @@ class Player :SKSpriteNode {
         weapon = Weapons(shooterType: "player", parentScene: self.parentScene);
         
         let texture = SKTexture(noiseWithSmoothness: 0.9, size: CGSize(width: 20, height: 20), grayscale: true);
-        enableLighting = true;
+        enableLighting = false;
         
         super.init(texture: texture, color: UIColor.blue, size: CGSize(width: 20, height: 20));
         self.colorBlendFactor = 0.5;
@@ -79,6 +79,7 @@ class Player :SKSpriteNode {
         self.weapon.parentScene = scene;
         
         self.position = CGPoint(x: parentScene.size.width / 2 , y: parentScene.size.height * 0.9);
+        self.weapon.position = self.position;
     }
     
     func swordSwing()
@@ -90,6 +91,7 @@ class Player :SKSpriteNode {
     func setHeath(valueTo:Double)
     {
         self.health = valueTo;
+    
         
     }
     
@@ -106,21 +108,48 @@ class Player :SKSpriteNode {
     
     func moveLeft(by:CGFloat = 30)
     {
-        let moveAction = SKAction.moveTo(x: self.getPosition().x - by, duration: 0.4);
-       
+        let moveAction = SKAction.moveTo(x: self.getPosition().x - by, duration: 0.2);
         self.run(moveAction);
-
+        
         
     }
     func moveRight(by:CGFloat = 30)
     {
-        let moveAction = SKAction.moveTo(x: self.getPosition().x + by, duration: 0.4);
+        let moveAction = SKAction.moveTo(x: self.getPosition().x + by, duration: 0.2);
         
         self.run(moveAction);
         
         
     }
+    
+    func moveUp(by:CGFloat = 30)
+    {
+        let moveAction = SKAction.moveTo(y: self.getPosition().y + by , duration: 0.2);
+        
+        self.run(moveAction);
+        
+        
+    }
+    func moveDown(by:CGFloat = 30)
+    {
+        let moveAction = SKAction.moveTo(y: self.getPosition().y - by, duration: 0.2);
+        
+        self.run(moveAction);
+        
+        
+    }
+    
+    func think(_ currentTime:CFTimeInterval)
+    {
+        self.weapon.position = self.position;
+        
+        if(self.weapon != nil)
+        {
+            self.weapon.think(currentTime);
+        }
+    }
 
+    
     
     func setPosition(myPosition:CGPoint)
     {

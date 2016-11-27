@@ -21,14 +21,22 @@ class Monster : SKSpriteNode{
     var enableLighting:Bool;
     var velocity:CGVector;
     var velocityAmount:CGFloat;
-    var timeElapsedSinceLastThought:CFTimeInterval;
+    
     var angle:CGFloat;
+    
+    //Time variables
+    var timeElapsedSinceLastThought:CFTimeInterval;
+    var lastThought:CFTimeInterval;
+    var lastAttachUpdate:CFTimeInterval;
+    
     
     init()
     {
         self.health = 5;
         
         self.timeElapsedSinceLastThought = 0;
+        self.lastThought = 0;
+        self.lastAttachUpdate = 0;
         self.lastKnownPlayerPosition = CGPoint(x: 0, y: 0);
         self.angle = 0;
         
@@ -88,11 +96,7 @@ class Monster : SKSpriteNode{
     func attack(playerPosition:CGPoint)
     {
         
-        //let direction:CGFloat  = getRotationTo(point: lastKnownPlayerPosition);
-        
-        
-        //self.physicsBody?.applyForce(forceVector);
-        
+
         let path:CGMutablePath = CGMutablePath();
         
         path.move(to: self.position);
@@ -104,6 +108,9 @@ class Monster : SKSpriteNode{
         
         
         self.run(actionMove);
+        
+        
+        
         
         //let distance = self.distanceBetween(pointOne: playerPosition, pointTwo: self.position)
         
@@ -129,10 +136,19 @@ class Monster : SKSpriteNode{
     func think(_ currentTime: CFTimeInterval)
     {
         
-        let newCurrentTime = currentTime / 1000;
-        self.timeElapsedSinceLastThought = (self.timeElapsedSinceLastThought) + newCurrentTime;
-        //self.attack(playerPosition: self.lastKnownPlayerPosition);
         
+        self.timeElapsedSinceLastThought = currentTime - self.lastThought ;
+        self.lastThought = currentTime;
+        
+        let TimeSinceLastAttachUpdate:CFTimeInterval = currentTime - lastAttachUpdate;
+        
+        
+        
+        if(TimeSinceLastAttachUpdate > 10)
+        {
+            self.lastAttachUpdate = currentTime;
+            self.attack(playerPosition: lastKnownPlayerPosition);
+        }
         
         
     }

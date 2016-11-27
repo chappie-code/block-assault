@@ -57,13 +57,13 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     var monstersDestroyed = 0;
     var playerHealth = 0;
     var display:Display;
-    
+    var playerIsTouching:Bool;
     
     
     
     override init(size: CGSize) {
         
-        
+        self.playerIsTouching = false;
         self.display = Display();
         self.player = Player();
         
@@ -80,22 +80,26 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     }
     
     func swipedRight(sender:UISwipeGestureRecognizer){
-        print("swiped right")
+
         player.moveRight();
+        player.weapon.playerStoppedTouch();
     }
     
     func swipedLeft(sender:UISwipeGestureRecognizer){
-        print("swiped left")
+
         player.moveLeft();
+        player.weapon.playerStoppedTouch();
     }
     
     func swipedUp(sender:UISwipeGestureRecognizer){
-        print("swiped up")
+        player.moveUp();
+        player.weapon.playerStoppedTouch();
     }
     
     func swipedDown(sender:UISwipeGestureRecognizer){
-        print("swiped down");
-        player.swordSwing();
+        
+        player.moveDown();
+        player.weapon.playerStoppedTouch();
     }
     
     
@@ -117,22 +121,30 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         
         let swipeRight:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedRight(sender:)));
         swipeRight.direction = .right
+        swipeRight.cancelsTouchesInView = false;
         view.addGestureRecognizer(swipeRight)
+        
         
         
         let swipeLeft:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedLeft(sender:)));
         swipeLeft.direction = .left;
+        swipeLeft.cancelsTouchesInView = false;
         view.addGestureRecognizer(swipeLeft)
         
         
         let swipeUp:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedUp(sender:)));
         swipeUp.direction = .up
+        swipeUp.cancelsTouchesInView = false;
         view.addGestureRecognizer(swipeUp)
         
         
         let swipeDown:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedDown(sender:)));
-        swipeDown.direction = .down
+        swipeDown.direction = .down;
+        swipeDown.cancelsTouchesInView = false;
         view.addGestureRecognizer(swipeDown)
+        
+        
+        
         
         self.physicsWorld.gravity = CGVector.zero;
         self.physicsWorld.contactDelegate = self;
@@ -152,64 +164,41 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
             ));
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //print("action");
-        // 1) choose the touch to work with
+    func longPressed(sender:UILongPressGestureRecognizer)
+    {
+        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //Todo: Make shooting happen automatically and follow the user's finger
+        
         guard let touch = touches.first else{
             return;
         }
         let touchLocation = touch.location(in: self);
         
-        print(touchLocation);
         
-        // 2) Set up initial location of projectile
-        
-        let shapeObject = SKShapeNode(rectOf: CGSize(width: 2, height: 2));
-        
-        shapeObject.strokeColor = SKColor.white;
-        
-        shapeObject.fillColor = SKColor.orange;
-        shapeObject.position = player.getPosition();
+        player.weapon.playerTouched(point: touchLocation);
         
         
         
-        shapeObject.physicsBody = SKPhysicsBody(rectangleOf: CGSize( width: 2, height: 2))
-        shapeObject.physicsBody?.isDynamic = true
-        shapeObject.physicsBody?.categoryBitMask = PhysicsCategory.Projectile
-        shapeObject.physicsBody?.contactTestBitMask = PhysicsCategory.Monster
-        shapeObject.physicsBody?.collisionBitMask = PhysicsCategory.None
-        shapeObject.physicsBody?.usesPreciseCollisionDetection = true
-        
-        
-        
-        // 3) determin offset of location to projectile
-        let offset = touchLocation - shapeObject.position;
-        
-        // 4) Bail out if you are shooting down or backwards
-        /*
-        if(0.0 > offset.x)
-        {
-            return
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else{
+            return;
         }
-        */
+        let touchLocation = touch.location(in: self);
         
-        // 5) Ok to add now - you've double checked position
+        player.weapon.playerTouched(point: touchLocation);
         
-        addChild(shapeObject);
+
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        // 6) get the direction of where to shoot
-        let direction = offset.normalized();
-        
-        // 7 Make it shoot far enough to be guaranteed off screen
-        let shootAmount = direction * 1000;
-        
-        // 8) Add the shot amount to the current position
-        let realDest = shootAmount + shapeObject.position;
-        
-        // 9) Create the action
-        let actionMove = SKAction.move(to: realDest,duration: 4.0);
-        let actionMoveDone = SKAction.removeFromParent();
-        shapeObject.run(SKAction.sequence([actionMove,actionMoveDone]));
+        player.weapon.playerStoppedTouch();
+        self.playerIsTouching = false;
         
     }
     
@@ -310,7 +299,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         for child in self.children {
             if (child is Monster)
             {
-                if (player != nil)
+                if (self.player != nil)
                 {
                     let monster = child as? Monster;
                     monster?.updatePlayer(position: player.position);
@@ -320,6 +309,15 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                 
                 
             }
+            
+            
+        }
+        
+        if ( self.player != nil)
+        {
+            self.player.think(currentTime);
+            
+            
         }
     }
     
