@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2BF134801DDDFC060008E593 /* Weapons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF1347F1DDDFC060008E593 /* Weapons.swift */; };
 		F003629B1DD57C4600AE1412 /* Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003629A1DD57C4600AE1412 /* Display.swift */; };
+		F003629D1DEBB6B800AE1412 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003629C1DEBB6B300AE1412 /* Camera.swift */; };
 		F008DC2E1D9F5F7B00F8DF0D /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F008DC2D1D9F5F7B00F8DF0D /* GameOverScene.swift */; };
 		F0354A061D863CFB00B2C55E /* background-music-aac.caf in Resources */ = {isa = PBXBuildFile; fileRef = F0354A031D863CFB00B2C55E /* background-music-aac.caf */; };
 		F0354A071D863CFB00B2C55E /* pew-pew-lei.caf in Resources */ = {isa = PBXBuildFile; fileRef = F0354A041D863CFB00B2C55E /* pew-pew-lei.caf */; };
@@ -46,6 +47,7 @@
 /* Begin PBXFileReference section */
 		2BF1347F1DDDFC060008E593 /* Weapons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weapons.swift; sourceTree = "<group>"; };
 		F003629A1DD57C4600AE1412 /* Display.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Display.swift; sourceTree = "<group>"; };
+		F003629C1DEBB6B300AE1412 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		F008DC2D1D9F5F7B00F8DF0D /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		F0354A031D863CFB00B2C55E /* background-music-aac.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "background-music-aac.caf"; sourceTree = "<group>"; };
 		F0354A041D863CFB00B2C55E /* pew-pew-lei.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pew-pew-lei.caf"; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				F0548E761DA35059004ED763 /* Player.swift */,
 				F003629A1DD57C4600AE1412 /* Display.swift */,
 				2BF1347F1DDDFC060008E593 /* Weapons.swift */,
+				F003629C1DEBB6B300AE1412 /* Camera.swift */,
 			);
 			path = "block-assault";
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				F0354A0A1D863E2F00B2C55E /* Readme.md in Sources */,
 				F0548E771DA35059004ED763 /* Player.swift in Sources */,
 				F0548E751DA0D7E0004ED763 /* Monster.swift in Sources */,
+				F003629D1DEBB6B800AE1412 /* Camera.swift in Sources */,
 				2BF134801DDDFC060008E593 /* Weapons.swift in Sources */,
 				F003629B1DD57C4600AE1412 /* Display.swift in Sources */,
 				F0A937911D5034F1006CD7CB /* AppDelegate.swift in Sources */,

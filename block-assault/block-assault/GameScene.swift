@@ -58,7 +58,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     var playerHealth = 0;
     var display:Display;
     var playerIsTouching:Bool;
-    
+    var cam:SKCameraNode!
     
     
     override init(size: CGSize) {
@@ -83,23 +83,27 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
 
         player.moveRight();
         player.weapon.playerStoppedTouch();
+        cam.position = player.position;
     }
     
     func swipedLeft(sender:UISwipeGestureRecognizer){
 
         player.moveLeft();
         player.weapon.playerStoppedTouch();
+        cam.position = player.position;
     }
     
     func swipedUp(sender:UISwipeGestureRecognizer){
         player.moveUp();
         player.weapon.playerStoppedTouch();
+        cam.position = player.position;
     }
     
     func swipedDown(sender:UISwipeGestureRecognizer){
         
         player.moveDown();
         player.weapon.playerStoppedTouch();
+        cam.position = player.position;
     }
     
     
@@ -143,6 +147,10 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         swipeDown.cancelsTouchesInView = false;
         view.addGestureRecognizer(swipeDown)
         
+        let zoomGesture:UIPinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.pinched(sender:)));
+        view.addGestureRecognizer(zoomGesture)
+        
+        
         
         
         
@@ -162,11 +170,21 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                 SKAction.wait(forDuration: 2.0)
                 ])
             ));
+        
+        cam = SKCameraNode() //initialize and assign an instance of SKCameraNode to the cam variable.
+        
+        
+        self.camera = cam //set the scene's camera to reference cam
+        self.addChild(cam) //make the cam a childElement of the scene itself.
+        
+        //position the camera on the gamescene.
+        cam.position = player.position;
     }
     
-    func longPressed(sender:UILongPressGestureRecognizer)
+    func pinched(sender:UIPinchGestureRecognizer)
     {
-        
+        print("pinched");
+        print(sender.scale);
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
