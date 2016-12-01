@@ -22,14 +22,25 @@ import Foundation
 import SpriteKit
 
 
-class Camera {
+class Camera :SKCameraNode{
     
     
     
-    init()
+    override init()
     {
-    
         
+        super.init();
+    }
+    
+    func moveTo(position:CGPoint)
+    {
+        let moveAction = SKAction.move(to: position, duration: 0.4);
+        self.run(moveAction);
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     

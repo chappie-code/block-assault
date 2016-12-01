@@ -58,7 +58,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     var playerHealth = 0;
     var display:Display;
     var playerIsTouching:Bool;
-    var cam:SKCameraNode!
+    var cam:Camera!
     
     
     override init(size: CGSize) {
@@ -83,27 +83,28 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
 
         player.moveRight();
         player.weapon.playerStoppedTouch();
-        cam.position = player.position;
+        cam.moveTo(position: player.position);
     }
     
     func swipedLeft(sender:UISwipeGestureRecognizer){
 
         player.moveLeft();
         player.weapon.playerStoppedTouch();
-        cam.position = player.position;
+        cam.moveTo(position: player.position);
     }
     
     func swipedUp(sender:UISwipeGestureRecognizer){
+        
         player.moveUp();
         player.weapon.playerStoppedTouch();
-        cam.position = player.position;
+        cam.moveTo(position: player.position);
     }
     
     func swipedDown(sender:UISwipeGestureRecognizer){
         
         player.moveDown();
         player.weapon.playerStoppedTouch();
-        cam.position = player.position;
+        cam.moveTo(position: player.position);
     }
     
     
@@ -171,8 +172,9 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                 ])
             ));
         
-        cam = SKCameraNode() //initialize and assign an instance of SKCameraNode to the cam variable.
         
+        
+        self.cam = Camera()
         
         self.camera = cam //set the scene's camera to reference cam
         self.addChild(cam) //make the cam a childElement of the scene itself.
@@ -185,6 +187,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     {
         print("pinched");
         print(sender.scale);
+        self.cam.setScale(sender.scale)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -317,11 +320,31 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         for child in self.children {
             if (child is Monster)
             {
+                
+                //Update monsters to the player position
                 if (self.player != nil)
                 {
                     let monster = child as? Monster;
                     monster?.updatePlayer(position: player.position);
                     monster?.think(currentTime);
+                    
+                }
+                
+                //update player to focus on nearest monster
+                if (self.player != nil)
+                {
+                    let monster = child as? Monster;
+                    if(self.distanceBetween(pointOne: (monster?.position)!, pointTwo: player.position) < 100)
+                    {
+                        print("alert");
+                        
+                    }
+                    else
+                    {
+                        
+                        
+                    }
+                    
                 }
                 
                 
@@ -368,6 +391,14 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         print(player.position)
         
         
+    }
+    
+    func distanceBetween(pointOne:CGPoint, pointTwo:CGPoint) -> CGFloat
+    {
+        let xDist:CGFloat = (pointTwo.x - pointOne.x);
+        let yDist:CGFloat = (pointTwo.y - pointOne.y);
+        let distance:CGFloat = sqrt((xDist * xDist) + (yDist * yDist));
+        return distance;
     }
     
     
