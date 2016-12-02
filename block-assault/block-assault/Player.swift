@@ -198,6 +198,7 @@ class Player :SKSpriteNode {
         
         
         
+        
     }
 
     func updatePointOfInterest()
