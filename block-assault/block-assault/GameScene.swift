@@ -336,7 +336,8 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                     let monster = child as? Monster;
                     if(self.distanceBetween(pointOne: (monster?.position)!, pointTwo: player.position) < 100)
                     {
-                        print("alert");
+                        print("monster Added");
+                        player.addMonsterPoint(position: (monster?.position)!);
                         
                     }
                     else
