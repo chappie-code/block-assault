@@ -14,6 +14,7 @@ class Weapons {
     var parentScene:SKScene;
     var playerTouchPoint:CGPoint?;
     var position:CGPoint?;
+    var selectedWeapon:String;
     
     
     //Time Variables
@@ -25,6 +26,8 @@ class Weapons {
         self.parentScene = parentScene;
         self.shooterType = shooterType;
         self.lastMainWeaponFireTime = 0;
+        self.selectedWeapon = "Gun";
+        
         
     }
     
@@ -82,10 +85,15 @@ class Weapons {
     func fireMainWeapon()
     {
         //find a solution for multi weapons
+        
+        
         if(self.playerTouchPoint != nil && self.position != nil)
         {
             self.fireBlockTo(location: self.playerTouchPoint!);
         }
+    
+    
+        
     }
     
     func fireBlockTo(location:CGPoint)

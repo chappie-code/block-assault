@@ -42,7 +42,7 @@ class Player :SKSpriteNode {
         weapon = Weapons(shooterType: "player", parentScene: self.parentScene);
         
         let texture = SKTexture(noiseWithSmoothness: 0.9, size: CGSize(width: 20, height: 20), grayscale: true);
-        enableLighting = true;
+        enableLighting = false;
         lastFocusTime = 0;
         
         super.init(texture: texture, color: UIColor.blue, size: CGSize(width: 20, height: 20));
@@ -83,7 +83,7 @@ class Player :SKSpriteNode {
         self.parentScene = scene;
         self.weapon.parentScene = scene;
         
-        self.position = CGPoint(x: parentScene.size.width / 2 , y: parentScene.size.height * 0.9);
+        self.position = CGPoint(x: parentScene.size.width / 2 , y: parentScene.size.height - 20);
         self.weapon.position = self.position;
     }
     

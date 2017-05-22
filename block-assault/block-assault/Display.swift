@@ -14,16 +14,19 @@ class Display {
     
     var healthLabel:SKLabelNode;
     var scoreLabel:SKLabelNode;
+    var changeWeaponButton:SKSpriteNode;
 
+    
 
-    init()
+    init(size: CGSize)
     {
+        
         let player = Player();
         
         self.healthLabel = SKLabelNode(fontNamed: "Helvetica-BoldOblique")
         let c:String = String(format:"%.1f", player.healthMax);
-        healthLabel.text = c;
-        healthLabel.fontSize = 40;
+        self.healthLabel.text = c;
+        self.healthLabel.fontSize = 40;
         healthLabel.fontColor = SKColor.white;
         healthLabel.position = CGPoint(x: 50, y: 0);
         
@@ -33,6 +36,18 @@ class Display {
         scoreLabel.fontSize = 40;
         scoreLabel.fontColor = SKColor.white;
         scoreLabel.position = CGPoint(x: 50, y: 50);
+        
+        
+        self.changeWeaponButton = SKSpriteNode(color: SKColor.red, size: CGSize(width: 100, height: 44))
+        self.changeWeaponButton.position = CGPoint(x: size.width - 110, y: size.height - 54);
+        
+        
+
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func get() -> SKLabelNode

@@ -56,21 +56,21 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     var player:Player;
     var monstersDestroyed = 0;
     var playerHealth = 0;
-    var display:Display;
+    var display:Display!;
     var playerIsTouching:Bool;
-    var cam:Camera!
+    var cam:Camera!;
     
     
     override init(size: CGSize) {
         
         self.playerIsTouching = false;
-        self.display = Display();
+        
         self.player = Player();
         
         super.init(size: size);
         
         
-       
+
         
         
     }
@@ -122,8 +122,10 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         background.position = center
         background.lightingBitMask = 1
         addChild(background);
-       
         
+        
+       
+        /*
         let swipeRight:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.swipedRight(sender:)));
         swipeRight.direction = .right
         swipeRight.cancelsTouchesInView = false;
@@ -148,10 +150,19 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         swipeDown.cancelsTouchesInView = false;
         view.addGestureRecognizer(swipeDown)
         
+ */
+        
         let zoomGesture:UIPinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.pinched(sender:)));
         view.addGestureRecognizer(zoomGesture)
         
+        let panGesture:UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.panned(sender:)));
+        view.addGestureRecognizer(panGesture);
+        panGesture.cancelsTouchesInView = false;
         
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressed(sender:)));
+        view.addGestureRecognizer(longPressRecognizer);
+        //longPressRecognizer.cancelsTouchesInView = true;
+        longPressRecognizer.delaysTouchesBegan = true;
         
         
         
@@ -161,9 +172,11 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                 
         addChild(player);
         
+        self.display = Display(size: self.size);
         
         addChild(display.healthLabel);
         addChild(display.scoreLabel);
+        addChild(display.changeWeaponButton);
         
         run(SKAction.repeatForever(
             SKAction.sequence([
@@ -171,6 +184,8 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                 SKAction.wait(forDuration: 2.0)
                 ])
             ));
+        
+
         
         
         
@@ -180,7 +195,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         self.addChild(cam) //make the cam a childElement of the scene itself.
         
         //position the camera on the gamescene.
-        cam.position = player.position;
+        cam.position = center;
     }
     
     func pinched(sender:UIPinchGestureRecognizer)
@@ -190,8 +205,29 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         self.cam.setScale(sender.scale)
     }
     
+    func longPressed(sender: UILongPressGestureRecognizer)
+    {
+        print(sender.description);
+        
+    }
+    
+    func panned(sender: UIPanGestureRecognizer)
+    {
+        
+        //sender.require(toFail: UITapGestureRecognizer.Type);
+        
+        //self.player.swordSwing();
+        let x = sender.velocity(in: self.view).x;
+        let y = sender.velocity(in: self.view).y;
+        
+        if(y > 0)
+        {
+            print("hih");
+        }
+        
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //Todo: Make shooting happen automatically and follow the user's finger
         
         guard let touch = touches.first else{
             return;
@@ -227,6 +263,10 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     {
     
     }
+    
+    
+    
+    
     
     func didBegin(_ contact: SKPhysicsContact) {
         
@@ -336,7 +376,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
                     let monster = child as? Monster;
                     if(self.distanceBetween(pointOne: (monster?.position)!, pointTwo: player.position) < 100)
                     {
-                        print("monster Added");
+                        //print("monster Added");
                         player.addMonsterPoint(position: (monster?.position)!);
                         
                     }
