@@ -217,7 +217,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         //sender.require(toFail: UITapGestureRecognizer.Type);
         
         //self.player.swordSwing();
-        let x = sender.velocity(in: self.view).x;
+        //let x = sender.velocity(in: self.view).x;
         let y = sender.velocity(in: self.view).y;
         
         if(y > 0)
@@ -261,7 +261,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     func updateDisplay()
     {
-    
+        display.setPsyLevel(level: self.player.weapon.psyCharge);
     }
     
     
@@ -357,6 +357,7 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
     
     override func update(_ currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        self.updateDisplay();
         for child in self.children {
             if (child is Monster)
             {

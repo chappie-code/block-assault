@@ -15,10 +15,12 @@ class Weapons {
     var playerTouchPoint:CGPoint?;
     var position:CGPoint?;
     var selectedWeapon:String;
+    var psyCharge:Int;
     
     
     //Time Variables
     var lastMainWeaponFireTime:CFTimeInterval;
+    var lastPsyCharge:CFTimeInterval;
     
     init(shooterType:String, parentScene:SKScene)
     {
@@ -26,7 +28,9 @@ class Weapons {
         self.parentScene = parentScene;
         self.shooterType = shooterType;
         self.lastMainWeaponFireTime = 0;
+        self.lastPsyCharge = 0;
         self.selectedWeapon = "Gun";
+        self.psyCharge = 0;
         
         
     }
@@ -70,14 +74,22 @@ class Weapons {
         if(self.playerTouchPoint != nil)
         {
             
-            if((currentTime - lastMainWeaponFireTime) >= 0.2)
+            if((currentTime - self.lastMainWeaponFireTime) >= 0.2)
             {
-                lastMainWeaponFireTime = currentTime;
+               self.lastMainWeaponFireTime = currentTime;
                 self.fireMainWeapon();
             }
         }
         
-        
+        if(self.psyCharge < 100)
+        {
+            if(currentTime - self.lastPsyCharge > 5)
+            {
+                self.psyCharge += 1;
+                self.lastPsyCharge = currentTime;
+                print(self.psyCharge);
+            }
+        }
         
         
     }

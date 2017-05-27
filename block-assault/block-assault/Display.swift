@@ -39,11 +39,17 @@ class Display {
         
         
         self.changeWeaponButton = SKSpriteNode(color: SKColor.red, size: CGSize(width: 100, height: 44))
-        self.changeWeaponButton.position = CGPoint(x: size.width - 110, y: size.height - 54);
+        self.changeWeaponButton.position = CGPoint(x: size.width - 110, y:  50);
         
         
 
         
+    }
+    
+    
+    func setPsyLevel(level: Int)
+    {
+        self.healthLabel.text = String(format:"%d", level);
     }
     
     required init?(coder aDecoder: NSCoder) {
