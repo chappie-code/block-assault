@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 
+
 class Weapons {
     var shooterType:String;
     var parentScene:SKScene;
@@ -16,6 +17,8 @@ class Weapons {
     var position:CGPoint?;
     var selectedWeapon:String;
     var psyCharge:Int;
+    var psyStart:CGPoint;
+    var psyEnd:CGPoint;
     
     
     //Time Variables
@@ -29,8 +32,11 @@ class Weapons {
         self.shooterType = shooterType;
         self.lastMainWeaponFireTime = 0;
         self.lastPsyCharge = 0;
-        self.selectedWeapon = "Gun";
+        //self.selectedWeapon = "Gun";
+        self.selectedWeapon = "Psy";
         self.psyCharge = 0;
+        self.psyStart = CGPoint(x: 0, y: 0);
+        self.psyEnd = CGPoint(x: 0, y: 0);
         
         
     }
@@ -92,6 +98,34 @@ class Weapons {
         }
         
         
+    }
+    
+    func firePsy()
+    {
+        
+        
+        let circularPsy = SKShapeNode(rectOf: CGSize(width: 30, height: 30));
+        
+        circularPsy.physicsBody = SKPhysicsBody(circleOfRadius: 15);
+        circularPsy.position = self.psyStart;
+        
+        let actionMove = SKAction.move(to: self.psyEnd,duration: 2.0);
+        let actionMoveDone = SKAction.removeFromParent();
+        //circularPsy.run(SKAction.sequence([actionMove,actionMoveDone]));
+        
+        circularPsy.physicsBody?.isDynamic = true;
+        circularPsy.physicsBody?.categoryBitMask = PhysicsCategory.Psy
+        circularPsy.physicsBody?.contactTestBitMask = PhysicsCategory.Monster;
+        //circularPsy.physicsBody?.collisionBitMask = PhysicsCategory.Monster;
+        circularPsy.physicsBody?.usesPreciseCollisionDetection = true
+        
+        let vector = CGVector(dx: (self.psyStart.x - self.psyEnd.x), dy: (self.psyStart.y - self.psyEnd.y))
+        circularPsy.physicsBody?.mass = 1;
+        circularPsy.physicsBody?.applyImpulse(vector);
+        
+        
+        self.parentScene.addChild(circularPsy);
+
     }
     
     func fireMainWeapon()

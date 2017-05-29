@@ -55,7 +55,7 @@ class Monster : SKSpriteNode{
         self.physicsBody?.isDynamic = true;
         self.physicsBody?.affectedByGravity = false;
         self.physicsBody?.categoryBitMask = PhysicsCategory.Monster
-        self.physicsBody?.contactTestBitMask = PhysicsCategory.Projectile
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.Projectile | PhysicsCategory.Psy;
         self.physicsBody?.collisionBitMask = PhysicsCategory.None;
         self.physicsBody?.usesPreciseCollisionDetection = true;
         

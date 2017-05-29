@@ -16,6 +16,7 @@ struct PhysicsCategory {
     static let Player       : UInt32 = 0b1       // 1
     static let Monster      : UInt32 = 0b10      // 2
     static let Projectile   : UInt32 = 0b11      // 3
+    static let Psy          : UInt32 = 0b100     // 4
 }
 
 func + (left: CGPoint, right: CGPoint) -> CGPoint {
@@ -234,9 +235,15 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         }
         let touchLocation = touch.location(in: self);
         
+        if(player.weapon.selectedWeapon == "Gun")
+        {
+            player.weapon.playerTouched(point: touchLocation);
+        }
         
-        player.weapon.playerTouched(point: touchLocation);
-        
+        if(player.weapon.selectedWeapon == "Psy")
+        {
+            player.weapon.psyStart = touchLocation;
+        }
         
         
     }
@@ -247,15 +254,36 @@ class GameScene: SKScene , SKPhysicsContactDelegate {
         }
         let touchLocation = touch.location(in: self);
         
-        player.weapon.playerTouched(point: touchLocation);
+        if(player.weapon.selectedWeapon == "Gun")
+        {
+            player.weapon.playerTouched(point: touchLocation);
+        }
+        
         
 
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        player.weapon.playerStoppedTouch();
+        if(player.weapon.selectedWeapon == "Gun")
+        {
+            player.weapon.playerStoppedTouch();
+        }
+        
+        
+        if(player.weapon.selectedWeapon == "Psy")
+        {
+            guard let touch = touches.first else{
+                return;
+            }
+            let touchLocation = touch.location(in: self);
+            
+            player.weapon.psyEnd = touchLocation;
+            player.weapon.firePsy();
+        }
+        
         self.playerIsTouching = false;
+        
         
     }
     
