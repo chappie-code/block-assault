@@ -119,9 +119,11 @@ class Weapons {
         //circularPsy.physicsBody?.collisionBitMask = PhysicsCategory.Monster;
         circularPsy.physicsBody?.usesPreciseCollisionDetection = true
         
-        let vector = CGVector(dx: (self.psyStart.x - self.psyEnd.x), dy: (self.psyStart.y - self.psyEnd.y))
-        circularPsy.physicsBody?.mass = 1;
+        let vector = CGVector(dx: 50+(self.psyEnd.x - self.psyStart.x), dy: (self.psyEnd.y - self.psyStart.y))
+        circularPsy.physicsBody?.mass = 0.5;
         circularPsy.physicsBody?.applyImpulse(vector);
+        
+        print(String(format: "vector: x- %d, y- %d",vector.dx, vector.dy));
         
         
         self.parentScene.addChild(circularPsy);
